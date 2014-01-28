@@ -1,19 +1,18 @@
-This tool allows you to connect a Scala REPL console to running JVM process
-without any special setup.
+This tool allows you to connect a Scala REPL console to a running Oracle (Sun) JVM
+process without any prior setup at the target process.
 
 If you want a Clojure REPL console, try `liverepl <https://github.com/djpowell/liverepl>`_.
 
 Usage
 -----
 
-To see a list of running JVM processes on the system, and their
-process ids:
+To see a list of running JVM processes and their process ids:
 
 ::
 
   livescala
 
-To see a list of class loaders of a specific process:
+To see a list of class loaders of a process:
 
 ::
 
