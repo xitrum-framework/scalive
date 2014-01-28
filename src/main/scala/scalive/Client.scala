@@ -5,7 +5,10 @@ import com.sun.tools.attach.VirtualMachine
 
 object Client {
   def main(args: Array[String]) {
-    listJvmProcesses()
+    //listJvmProcesses()
+    println(args.toList)
+    val pid = args(0)
+    listClassLoaders(pid)
   }
 
   private def listJvmProcesses() {
@@ -17,5 +20,12 @@ object Client {
       val vmd = it.next()
       println(vmd.id + "\t" + vmd.displayName)
     }
+  }
+
+  private def listClassLoaders(pid: String) {
+    println("Attach to pid " + pid)
+
+    val vm = VirtualMachine.attach(pid)
+    vm.loadAgent("/Users/ngoc/src/scalive/target/scala-2.10/scalive_2.10-1.0-SNAPSHOT.jar")
   }
 }
