@@ -23,3 +23,12 @@ To connect a Scala REPL console to a process:
 ::
 
   scalive <pid> <class-loader-id>
+
+How it works
+------------
+
+Scalive uses the `Attach API <https://blogs.oracle.com/CoreJavaTechTips/entry/the_attach_api>`_
+to tell the target process to load an `agent <http://javahowto.blogspot.jp/2006/07/javaagent-option.html>`_.
+
+The agent creates a TCP server to let the Scalive process interact with the target
+process. The Scalive process acts as a client.
