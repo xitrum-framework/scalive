@@ -11,3 +11,8 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked")
 // Add tools.jar to classpath
 // https://blogs.oracle.com/CoreJavaTechTips/entry/the_attach_api
 unmanagedJars in Compile := (file(System.getProperty("java.home")) / ".." / "lib" * "tools.jar").classpath
+
+packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
+  "Agent-Class" -> "scalive.Agent",
+  "Main-Class"  -> "scalive.Client"
+)
