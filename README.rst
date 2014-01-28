@@ -10,16 +10,16 @@ To see a list of running JVM processes and their process ids:
 
 ::
 
-  livescala
+  scalive
 
 To see a list of class loaders of a process:
 
 ::
 
-  livescala <pid>
+  scalive <pid>
 
 To connect a Scala REPL console to a process:
 
 ::
 
-  livescala <pid> <class-loader-id>
+  scalive <pid> <class-loader-id>
