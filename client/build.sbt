@@ -1,6 +1,6 @@
 organization := "tv.cntt"
 
-name         := "scalive"
+name         := "scalive-client"
 
 version      := "1.0-SNAPSHOT"
 
@@ -13,14 +13,8 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked")
 unmanagedJars in Compile := (file(System.getProperty("java.home")) / ".." / "lib" * "tools.jar").classpath
 
 packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
-  "Agent-Class" -> "scalive.Agent",
   "Main-Class"  -> "scalive.Client"
 )
-
-libraryDependencies <++= scalaVersion { v => Seq(
- "org.scala-lang" % "scala-compiler" % v,
- "org.scala-lang" % "jline"          % v
-)}
 
 // Copy these to target/xitrum when sbt xitrum-package is run
 XitrumPackage.copy("script")
