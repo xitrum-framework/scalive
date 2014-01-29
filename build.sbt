@@ -16,3 +16,11 @@ packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
   "Agent-Class" -> "scalive.Agent",
   "Main-Class"  -> "scalive.Client"
 )
+
+libraryDependencies <++= scalaVersion { v => Seq(
+ "org.scala-lang" % "scala-compiler" % v,
+ "org.scala-lang" % "jline"          % v
+)}
+
+// Copy these to target/xitrum when sbt xitrum-package is run
+XitrumPackage.copy("script")

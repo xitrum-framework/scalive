@@ -6,9 +6,15 @@ import com.sun.tools.attach.VirtualMachine
 object Client {
   def main(args: Array[String]) {
     //listJvmProcesses()
-    println(args.toList)
-    val pid = args(0)
-    listClassLoaders(pid)
+//    println(args.toList)
+//    val pid = args(0)
+//    listClassLoaders(pid)
+
+    scalive.Repl.write(null)
+
+//    println(scala.tools.nsc.interpreter.ILoop.run(List("println(123)\n\n")))
+//    println(scala.tools.nsc.interpreter.ILoop.run(List("println(321)")))
+
   }
 
   private def listJvmProcesses() {
