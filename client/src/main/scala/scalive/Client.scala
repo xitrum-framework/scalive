@@ -35,7 +35,8 @@ object Client {
     val vm        = VirtualMachine.attach(pid)
     val agentJar  = "/Users/ngoc/src/scalive/agent/target/xitrum/lib/scalive-agent_2.10-1.0-SNAPSHOT.jar"
     val port      = getFreePort()
-    val agentArgs = Seq(port).mkString(" ")
+    val classpath = "/Users/ngoc/src/scalive/agent/target/xitrum/lib"
+    val agentArgs = Seq(port, classpath).mkString(" ")
     vm.loadAgent(agentJar, agentArgs)
 
     connectToRepl(port)
