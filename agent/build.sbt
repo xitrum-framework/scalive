@@ -13,8 +13,7 @@ packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
 )
 
 libraryDependencies <++= scalaVersion { v => Seq(
- "org.scala-lang" % "scala-compiler" % v,
- "org.scala-lang" % "jline"          % v
+ "org.scala-lang" % "scala-compiler" % v
 )}
 
 XitrumPackage.copy()
