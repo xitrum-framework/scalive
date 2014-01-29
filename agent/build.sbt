@@ -16,4 +16,4 @@ libraryDependencies <++= scalaVersion { v => Seq(
  "org.scala-lang" % "scala-compiler" % v
 )}
 
-XitrumPackage.copy()
+XitrumPackage.copy("script")
