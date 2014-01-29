@@ -1,38 +1,41 @@
 package scalive
 
-import java.io.{BufferedReader, PipedReader, PipedWriter, PrintWriter}
+import java.io.{
+  BufferedReader,
+  InputStream, InputStreamReader,
+  OutputStream, PrintStream, PrintWriter
+}
 
 import scala.tools.nsc.interpreter.ILoop
 import scala.tools.nsc.Settings
 
-object Repl {
-  val pipedWriter = new PipedWriter
-
-  val settings = new Settings
+class Repl(in: InputStream, out: OutputStream) {
+  private val settings = new Settings
   settings.usejavacp.value = true
 
-  val repl = new ILoop(
-    new BufferedReader(new PipedReader(pipedWriter)),
-    new PrintWriter(System.out)
+  private val repl = new ILoop(
+    new BufferedReader(new InputStreamReader(in)),
+    new PrintWriter(out)
   )
 
-  def write(src: String) {
-    new Thread(new Runnable {
-      override def run() {
-        var i = 1
+  new Thread(new Runnable {
+    override def run() {
+      // Java
+      System.setIn(in)
+      System.setOut(new PrintStream(out))
+      System.setErr(new PrintStream(out))
 
-        pipedWriter.append("var j = 1\n")
-        while (i < 20) {
-          pipedWriter.append("println(j)\n")
-          pipedWriter.append("j += 1\n")
-          i += 1
-        }
+      // Scala
+      Console.setIn(in)
+      Console.setOut(out)
+      Console.setErr(out)
 
-        Thread.sleep(100000)
-//        repl.closeInterpreter()
-      }
-    }).start()
+      // This call does not return until the stream (connection) is closed
+      repl.process(settings)
+    }
+  }).start()
 
-    repl.process(settings)
+  def close() {
+    repl.closeInterpreter()
   }
 }

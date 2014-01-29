@@ -3,18 +3,19 @@ package scalive
 // http://docs.oracle.com/javase/6/docs/jdk/api/attach/spec/index.html
 import com.sun.tools.attach.VirtualMachine
 
+import java.net.{InetAddress, ServerSocket, Socket}
+
 object Client {
+  private val LOCALHOST = InetAddress.getByAddress(Array[Byte](127, 0, 0, 1))
+
   def main(args: Array[String]) {
-    //listJvmProcesses()
-//    println(args.toList)
-//    val pid = args(0)
-//    listClassLoaders(pid)
+    if (args.isEmpty) {
+      listJvmProcesses()
+      return
+    }
 
-    scalive.Repl.write(null)
-
-//    println(scala.tools.nsc.interpreter.ILoop.run(List("println(123)\n\n")))
-//    println(scala.tools.nsc.interpreter.ILoop.run(List("println(321)")))
-
+    val pid = args(0)
+    listClassLoaders(pid)
   }
 
   private def listJvmProcesses() {
@@ -31,7 +32,41 @@ object Client {
   private def listClassLoaders(pid: String) {
     println("Attach to pid " + pid)
 
-    val vm = VirtualMachine.attach(pid)
-    vm.loadAgent("/Users/ngoc/src/scalive/target/scala-2.10/scalive_2.10-1.0-SNAPSHOT.jar")
+    val vm        = VirtualMachine.attach(pid)
+    val agentJar  = "/Users/ngoc/src/scalive/agent/target/xitrum/lib/scalive-agent_2.10-1.0-SNAPSHOT.jar"
+    val port      = getFreePort()
+    val agentArgs = Seq(port).mkString(" ")
+    vm.loadAgent(agentJar, agentArgs)
+
+    connectToRepl(port)
+  }
+
+  private def getFreePort(): Int = {
+    val server = new ServerSocket(0, 0, LOCALHOST)
+    val port   = server.getLocalPort
+    server.close()
+    port
+  }
+
+  private def connectToRepl(port: Int) {
+    import java.io._
+    val client = new Socket(LOCALHOST, port)
+    val in     = client.getInputStream
+    val out    = client.getOutputStream
+
+    new Thread(new Runnable {
+      override def run() {
+        val r = new InputStreamReader(in)
+        while (true) print(r.read().toChar)
+      }
+    }).start()
+
+    while (true) {
+      for (ln <- io.Source.stdin.getLines) {
+        out.write(ln.getBytes)
+        out.write('\n')
+        out.flush()
+      }
+    }
   }
 }
