@@ -18,24 +18,22 @@ class Repl(in: InputStream, out: OutputStream) {
     new PrintWriter(out)
   )
 
-  new Thread(new Runnable {
-    override def run() {
-      // Java
-      System.setIn(in)
-      System.setOut(new PrintStream(out))
-      System.setErr(new PrintStream(out))
+  def start() {
+    // Java
+    System.setIn(in)
+    System.setOut(new PrintStream(out))
+    System.setErr(new PrintStream(out))
 
-      // Scala
-      Console.setIn(in)
-      Console.setOut(out)
-      Console.setErr(out)
+    // Scala
+    Console.setIn(in)
+    Console.setOut(out)
+    Console.setErr(out)
 
-      // This call does not return until the stream (connection) is closed
-      repl.process(settings)
-    }
-  }).start()
+    // This call does not return until the stream (connection) is closed
+    repl.process(settings)
+  }
 
-  def close() {
+  def stop() {
     repl.closeInterpreter()
   }
 }

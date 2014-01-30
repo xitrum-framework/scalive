@@ -4,55 +4,42 @@ import java.lang.instrument.Instrumentation
 import java.net.ServerSocket
 
 object Agent {
+  private var portOpen = false
+
   /**
-   * @param agentArgs <port> <classpath>; classpath is the directory that
-   * contains scala-compiler.jar (for REPL) and its dependencies
-   * (scala-library.jar and scala-reflect.jar)
+   * @param agentArgs <server port>
    */
   def agentmain(agentArgs: String, inst: Instrumentation) {
-    // Avoid using Scala methods, only use Java methods until the classpath is added
-    val args      = agentArgs.split(" ")
-    val classpath = args(1)
-    addClasspath(classpath)
+    val port = agentArgs.toInt
 
-    val port = args(0).toInt
-    println("Scalive REPL server loaded at port " + port)
-    startTcpRepl(port)
+    // Need to start a new thread because:
+    // - startTcpRepl blocks until a connection comes in
+    // - VirtualMachine#loadAgent at the client does not return until this
+    //   agentmain method returns
+    // - The client only connects to the server after VirtualMachine#loadAgent
+    //   returns
+    new Thread(new Runnable {
+      override def run() { startTcpRepl(port) }
+    }).start()
+
+    while (!portOpen) Thread.sleep(100)
   }
 
   /**
-   * @param args <port>
+   * @param args <server port>
    */
   def main(args: Array[String]) {
     val port = args(0).toInt
     startTcpRepl(port)
   }
 
-  // http://www.scala-lang.org/old/node/7542
-  private def addClasspath(classpath: String) = try {
-    val field = classOf[ClassLoader].getDeclaredField("usr_paths")
-    field.setAccessible(true)
-    val paths = field.get(null).asInstanceOf[Array[String]]
-    if (!(paths contains classpath)) {
-      field.set(null, paths :+ classpath)
-      System.setProperty(
-        "java.library.path",
-        System.getProperty("java.library.path") + java.io.File.pathSeparator + classpath)
-    }
-  } catch {
-    case _: IllegalAccessException =>
-      System.err.println("Scalive: Could not add classpath (insufficient permissions; couldn't modify private variables)")
-    case _: NoSuchFieldException =>
-      System.err.println("Scalive: Could not add classpath (not Oracle/Sun JVM?)")
-  }
-
   private def startTcpRepl(port: Int) {
-    new Thread(new Runnable {
-      override def run() {
-        val server = new ServerSocket(port)
-        val client = server.accept()
-        new Repl(client.getInputStream, client.getOutputStream)
-      }
-    }).start()
+    println("Scalive REPL server starts at port " + port)
+    val server = new ServerSocket(port)
+    portOpen = true
+
+    val client = server.accept()  // Block until a connection comes in
+    val repl = new Repl(client.getInputStream, client.getOutputStream)
+    repl.start()
   }
 }
