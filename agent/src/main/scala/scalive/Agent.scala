@@ -34,12 +34,12 @@ object Agent {
   }
 
   private def startTcpRepl(port: Int) {
-    println("Scalive REPL server starts at port " + port)
+    println("[Scalive] REPL server starts at port " + port)
     val server = new ServerSocket(port)
-    portOpen = true
+    portOpen   = true
 
     val client = server.accept()  // Block until a connection comes in
-    val repl = new Repl(client.getInputStream, client.getOutputStream)
+    val repl   = new Repl(client.getInputStream, client.getOutputStream)
     repl.start()
   }
 }

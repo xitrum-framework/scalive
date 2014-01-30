@@ -20,6 +20,9 @@ class Repl(in: InputStream, out: OutputStream) {
 
   def start() {
     // Java
+    val oldIn  = System.in
+    val oldOut = System.out
+    val oldErr = System.err
     System.setIn(in)
     System.setOut(new PrintStream(out))
     System.setErr(new PrintStream(out))
@@ -31,6 +34,15 @@ class Repl(in: InputStream, out: OutputStream) {
 
     // This call does not return until the stream (connection) is closed
     repl.process(settings)
+
+    System.setIn(oldIn)
+    System.setOut(oldOut)
+    System.setErr(oldErr)
+    Console.setIn(oldIn)
+    Console.setOut(oldOut)
+    Console.setErr(oldErr)
+
+    println("[Scalive] REPL closed")
   }
 
   def stop() {

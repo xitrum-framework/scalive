@@ -39,11 +39,13 @@ object Client {
   }
 
   private def loadAgent(agentJar: String, pid: String) {
-    println("Attach to pid " + pid)
-
     val vm   = VirtualMachine.attach(pid)
     val port = getFreePort()
     vm.loadAgent(agentJar, "" + port)
+
+    Runtime.getRuntime.addShutdownHook(new Thread {
+      override def run() { vm.detach() }
+    })
 
     connectToRepl(port)
   }
@@ -60,6 +62,8 @@ object Client {
     val in     = client.getInputStream
     val out    = client.getOutputStream
 
+    println("[Scalive] Attached to remote process at port " + port)
+
     new Thread(new Runnable {
       override def run() {
         val reader = new InputStreamReader(in)
@@ -70,7 +74,7 @@ object Client {
           if (!closed) print(int.toChar)
         }
 
-        println("Connection to remote process closed")
+        println("[Scalive] Connection to remote process closed")
         System.exit(0)
       }
     }).start()
