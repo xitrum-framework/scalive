@@ -4,7 +4,7 @@ package scalive
 import com.sun.tools.attach.VirtualMachine
 
 import java.io.InputStreamReader
-import java.net.{InetAddress, ServerSocket, Socket}
+import java.net.{InetAddress, ServerSocket, Socket, SocketException}
 
 import scala.io.Source
 
@@ -62,16 +62,30 @@ object Client {
 
     new Thread(new Runnable {
       override def run() {
-        val r = new InputStreamReader(in)
-        while (true) print(r.read().toChar)
+        val reader = new InputStreamReader(in)
+        var closed = false
+        while (!closed) {
+          val int = reader.read()
+          closed = int < 0
+          if (!closed) print(int.toChar)
+        }
+
+        println("Connection to remote process closed")
+        System.exit(0)
       }
     }).start()
 
-    while (true) {
-      for (ln <- Source.stdin.getLines) {
-        out.write(ln.getBytes)
-        out.write('\n')
-        out.flush()
+    var closed = false
+    while (!closed) {
+      try {
+        for (ln <- Source.stdin.getLines) {
+          out.write(ln.getBytes)
+          out.write('\n')
+          out.flush()
+        }
+      } catch {
+        case e: SocketException =>
+          closed = true
       }
     }
   }
