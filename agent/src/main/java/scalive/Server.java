@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -47,7 +46,7 @@ public class Server {
         }
     }
 
-    private static ClassLoader createClassloader(String jarpath, String clId) throws MalformedURLException {
+    private static ClassLoader createClassloader(String jarpath, String clId) throws Exception {
         Discovery d = new Discovery();
 
         if (clId == null) {
