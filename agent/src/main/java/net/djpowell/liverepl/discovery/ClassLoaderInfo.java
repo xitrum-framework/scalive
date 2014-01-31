@@ -27,10 +27,10 @@ public class ClassLoaderInfo implements Comparable<Object> {
         }
     }
 
-    public static final String header = String.format("#%-3s %-20s : %s", "Id", "ClassLoader", "Info");
+    public static final String header = String.format("#%-3s %-20s %s", "Id", "ClassLoader", "Info");
 
     public String toString() {
-        return String.format("#%-3s %-20s : %s", id, getClassLoaderName(), info);
+        return String.format("%-3s %-20s  %s", id, getClassLoaderName(), info);
     }
 
     public int compareTo(Object o) {

@@ -12,8 +12,8 @@ object AgentLoader {
    * scala-library.jar, scala-compiler.jar, and scala-reflect.jar
    */
   def main(args: Array[String]) {
-    if (args.length != 1 && args.length != 2) {
-      println("Arguments: <jarpath> [pid to connect to]")
+    if (args.length != 1 && args.length != 2 && args.length != 3) {
+      println("Arguments: <jarpath> [pid] [class loader id]")
       return
     }
 
@@ -26,7 +26,8 @@ object AgentLoader {
 
     val jarpath = args(0)
     val pid     = args(1)
-    loadAgent(jarpath, pid)
+    val clId    = if (args.length == 3) args(2) else ""
+    loadAgent(jarpath, pid, clId)
   }
 
   /**
@@ -60,11 +61,11 @@ object AgentLoader {
     }
   }
 
-  private def loadAgent(jarpath: String, pid: String) {
+  private def loadAgent(jarpath: String, pid: String, clId: String) {
     val agentJar = Classpath.findJar(jarpath, "scalive-agent")
     val vm       = VirtualMachine.attach(pid)
     val port     = Client.getFreePort()
-    vm.loadAgent(agentJar, jarpath + " " + port)
+    vm.loadAgent(agentJar, jarpath + " " + port + " " + clId)
 
     Runtime.getRuntime.addShutdownHook(new Thread {
       override def run() { vm.detach() }
