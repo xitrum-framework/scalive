@@ -6,9 +6,14 @@ import com.sun.tools.attach.VirtualMachine
 import java.io.File
 
 object AgentLoader {
+ /**
+   * @param args <jarpath> [class loader id];
+   * jarpath: absolute path to directory that contains scalive-agent.jar,
+   * scala-library.jar, scala-compiler.jar, and scala-reflect.jar
+   */
   def main(args: Array[String]) {
     if (args.length != 1 && args.length != 2) {
-      println("Arguments: <absolute path to directory that contains scalive-agent.jar, scala-library.jar, scala-compiler.jar, and scala-reflect.jar> [pid to connect to]")
+      println("Arguments: <jarpath> [pid to connect to]")
       return
     }
 
@@ -67,6 +72,4 @@ object AgentLoader {
 
     Client.connectToRepl(port)
   }
-
-
 }

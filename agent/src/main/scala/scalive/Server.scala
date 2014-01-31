@@ -6,13 +6,17 @@ object Server {
   private var portOpen = false
 
   /**
-   * @param agentArgs <jarpath> <server port> [class loader id]
+   * @param args <jarpath> <server port> [class loader id];
+   * jarpath: absolute path to directory that contains scalive-agent.jar,
+   * scala-library.jar, scala-compiler.jar, and scala-reflect.jar
    */
-  def start(args: Array[String]) {
-    val jarpath = args(0)
+  def main(args: Array[String]) {
+    if (args.length != 2 && args.length != 3) {
+      println("Arguments: <jarpath> <server port> [class loader id]")
+      return
+    }
 
-    Classpath.findAndAddJar(ClassLoader.getSystemClassLoader, jarpath, "scala-compiler")
-    Classpath.findAndAddJar(ClassLoader.getSystemClassLoader, jarpath, "scala-reflect")
+    val jarpath = args(0)
 
     val port = args(1).toInt
     val clId = if (args.length == 3) Some(args(2).toInt) else None
