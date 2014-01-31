@@ -15,6 +15,3 @@ unmanagedJars in Compile := (file(System.getProperty("java.home")) / ".." / "lib
 packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
   "Main-Class" -> "scalive.AgentLoader"
 )
-
-// Copy these to target/xitrum when sbt xitrum-package is run
-XitrumPackage.copy("script")
