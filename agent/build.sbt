@@ -13,7 +13,7 @@ packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
 )
 
 libraryDependencies <+= scalaVersion { v =>
- "org.scala-lang" % "scala-compiler" % v
+  "org.scala-lang" % "scala-compiler" % v
 }
 
 unmanagedSources in Compile += file(
