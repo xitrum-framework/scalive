@@ -1,0 +1,16 @@
+#!/bin/sh
+
+JAVA_OPTS='-Djava.awt.headless=true'
+
+# Quote because path may contain spaces
+if [ -h $0 ]
+then
+  ROOT_DIR="$(cd "$(dirname "$(readlink -n "$0")")" && pwd)"
+else
+  ROOT_DIR="$(cd "$(dirname $0)" && pwd)"
+fi
+cd "$ROOT_DIR"
+
+# Use exec to be compatible with daemontools:
+# http://cr.yp.to/daemontools.html
+exec java $JAVA_OPTS -cp $ROOT_DIR scalive.AgentLoader $ROOT_DIR "$@"

@@ -33,7 +33,7 @@ replace the above 2.10.3 jars with the downloaded ones.
 Usage
 -----
 
-Run the shell script scalive (*nix) or scalive.bat (Windows).
+Run the shell script ``scalive`` (*nix) or ``scalive.bat`` (Windows).
 
 To see a list of running JVM processes and their process ids:
 

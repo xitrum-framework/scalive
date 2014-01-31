@@ -1,11 +1,18 @@
-"sbt run" with arguments
-------------------------
-
-While developing, for convenience we want to run from SBT with arguments:
+zip directory is the directory that will be zipped when Scalive is released.
 
 ::
 
-  sbt "project scalive" "run arg1 arg2"
+  zip/
+    scalive
+    scalive.bat
+    scala-compiler-2.10.3.jar
+    scala-library-2.10.3.jar
+    scala-reflect-2.10.3.jar
+    scalive-agent_2.10-1.0-SNAPSHOT.jar -> ../../agent/target/scala-2.10/scalive-agent_2.10-1.0-SNAPSHOT.jar
+    scalive-client_2.10-1.0-SNAPSHOT.jar -> ../../client/target/scala-2.10/scalive-client_2.10-1.0-SNAPSHOT.jar
 
-See:
-http://stackoverflow.com/questions/7674615/sbt-start-a-command-line-run-of-the-main-class-of-a-non-default-project
+While developing:
+
+* Add scala-compiler.jar, scala-library.jar, and scala-reflect.jar there
+* Run ``sbt package`` in projects scalive-agent and scalive-client to update their jar files
+* Run ``scalive`` to test
