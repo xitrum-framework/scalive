@@ -7,10 +7,17 @@ object Agent {
   private var portOpen = false
 
   /**
-   * @param agentArgs <server port>
+   * @param agentArgs <jarpath> <server port> [class loader id]
    */
   def agentmain(agentArgs: String, inst: Instrumentation) {
-    val port = agentArgs.toInt
+    val args    = agentArgs.split(" ")
+    val jarpath = args(0)
+
+    // Add scala-library.jar immediately so that we can write Scala code
+    // (the above must be Java code)
+
+    val port = args(1).toInt
+    val clId = if (args.length == 3) Some(args(2).toInt) else None
 
     // Need to start a new thread because:
     // - startTcpRepl blocks until a connection comes in
@@ -23,14 +30,6 @@ object Agent {
     }).start()
 
     while (!portOpen) Thread.sleep(100)
-  }
-
-  /**
-   * @param args <server port>
-   */
-  def main(args: Array[String]) {
-    val port = args(0).toInt
-    startTcpRepl(port)
   }
 
   private def startTcpRepl(port: Int) {
