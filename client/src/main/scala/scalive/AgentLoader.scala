@@ -8,7 +8,7 @@ import java.io.File
 object AgentLoader {
   def main(args: Array[String]) {
     if (args.length != 1 && args.length != 2) {
-      println("Arguments: <absolute path to scalive-agent.jar> [pid to connect to]")
+      println("Arguments: <absolute path to directory that contains scalive-agent.jar, scala-library.jar, scala-compiler.jar, and scala-reflect.jar> [pid to connect to]")
       return
     }
 
@@ -19,9 +19,9 @@ object AgentLoader {
       return
     }
 
-    val agentJar = args(0)
-    val pid      = args(1)
-    loadAgent(agentJar, pid)
+    val jarpath = args(0)
+    val pid     = args(1)
+    loadAgent(jarpath, pid)
   }
 
   /**
@@ -55,10 +55,11 @@ object AgentLoader {
     }
   }
 
-  private def loadAgent(agentJar: String, pid: String) {
-    val vm   = VirtualMachine.attach(pid)
-    val port = Client.getFreePort()
-    vm.loadAgent(agentJar, "" + port)
+  private def loadAgent(jarpath: String, pid: String) {
+    val agentJar = Classpath.findJar(jarpath, "scalive-agent")
+    val vm       = VirtualMachine.attach(pid)
+    val port     = Client.getFreePort()
+    vm.loadAgent(agentJar, jarpath + " " + port)
 
     Runtime.getRuntime.addShutdownHook(new Thread {
       override def run() { vm.detach() }
@@ -66,4 +67,6 @@ object AgentLoader {
 
     Client.connectToRepl(port)
   }
+
+
 }
