@@ -13,7 +13,7 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked")
 unmanagedJars in Compile := (file(System.getProperty("java.home")) / ".." / "lib" * "tools.jar").classpath
 
 packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
-  "Main-Class"  -> "scalive.Client"
+  "Main-Class" -> "scalive.AgentLoader"
 )
 
 // Copy these to target/xitrum when sbt xitrum-package is run
