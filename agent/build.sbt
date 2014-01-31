@@ -12,8 +12,10 @@ packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
   "Agent-Class" -> "scalive.Agent"
 )
 
-libraryDependencies <++= scalaVersion { v => Seq(
+libraryDependencies <+= scalaVersion { v =>
  "org.scala-lang" % "scala-compiler" % v
-)}
+}
 
-XitrumPackage.copy("script")
+unmanagedSources in Compile += file(
+  System.getProperty("user.dir") + "/../client/src/main/scala/scalive/Classpath.scala"
+)

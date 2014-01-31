@@ -18,17 +18,17 @@ Extract `scalive-1.0.zip <TODO>`_ you will see:
     scalive.bat
     scalive-client-1.0.jar
     scalive-agent-1.0.jar
-    scala-library-2.0.3.jar
-    scala-compiler-2.0.3.jar
-    scala-reflect-2.0.3.jar
+    scala-library-2.10.3.jar
+    scala-compiler-2.10.3.jar
+    scala-reflect-2.10.3.jar
 
-scala-library-2.0.3.jar, scala-compiler-2.0.3.jar, and scala-reflect-2.0.3.jar
+scala-library-2.10.3.jar, scala-compiler-2.10.3.jar, and scala-reflect-2.10.3.jar
 will be loaded to your running JVM process, if they have not been loaded.
 
 Note that, for example, if your process have scala-library-2.0.2 but does not
 have scala-compiler-2.0.2.jar and scala-reflect-2.0.2.jar, for best version
 compatibility safety, you may need to manually download the 2.0.2 jars and
-replace the above 2.0.3 jars with the downloaded ones.
+replace the above 2.10.3 jars with the downloaded ones.
 
 Usage
 -----
