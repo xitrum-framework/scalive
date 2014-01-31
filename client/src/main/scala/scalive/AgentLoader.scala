@@ -29,13 +29,13 @@ object AgentLoader {
    * classpath by default:
    *
    * {{{
-   * jdk
-   *   bin
+   * jdk/
+   *   bin/
    *     java
    *     javac
-   *   jre
+   *   jre/
    *     java
-   *   lib
+   *   lib/
    *     tools.jar
    * }}}
    */
