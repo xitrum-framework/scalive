@@ -28,19 +28,19 @@ object Server {
     // - The client only connects to the server after VirtualMachine#loadAgent
     //   returns
     new Thread(new Runnable {
-      override def run() { startTcpRepl(port) }
+      override def run() { startTcpRepl(jarpath, port) }
     }).start()
 
     while (!portOpen) Thread.sleep(100)
   }
 
-  private def startTcpRepl(port: Int) {
+  private def startTcpRepl(jarpath: String, port: Int) {
     println("[Scalive] REPL server starts at port " + port)
     val server = new ServerSocket(port)
     portOpen   = true
 
     val client = server.accept()  // Block until a connection comes in
-    val repl   = new Repl(client.getInputStream, client.getOutputStream)
+    val repl   = new Repl(jarpath, client.getInputStream, client.getOutputStream)
     repl.start()
   }
 }
