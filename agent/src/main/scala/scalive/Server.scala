@@ -1,20 +1,18 @@
 package scalive
 
-import java.lang.instrument.Instrumentation
 import java.net.ServerSocket
 
-object Agent {
+object Server {
   private var portOpen = false
 
   /**
    * @param agentArgs <jarpath> <server port> [class loader id]
    */
-  def agentmain(agentArgs: String, inst: Instrumentation) {
-    val args    = agentArgs.split(" ")
+  def start(args: Array[String]) {
     val jarpath = args(0)
 
-    // Add scala-library.jar immediately so that we can write Scala code
-    // (the above must be Java code)
+    Classpath.findAndAddJar(ClassLoader.getSystemClassLoader, jarpath, "scala-compiler")
+    Classpath.findAndAddJar(ClassLoader.getSystemClassLoader, jarpath, "scala-reflect")
 
     val port = args(1).toInt
     val clId = if (args.length == 3) Some(args(2).toInt) else None
