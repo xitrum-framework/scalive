@@ -3,6 +3,9 @@ process without any prior setup at the target process.
 
 If you want a Clojure REPL console, try `liverepl <https://github.com/djpowell/liverepl>`_.
 
+TODO: Add a YouTube video here
+http://stackoverflow.com/questions/4279611/how-to-embed-a-video-into-github-readme-md
+
 Download
 --------
 
@@ -19,9 +22,13 @@ Extract `scalive-1.0.zip <TODO>`_ you will see:
     scala-compiler-2.0.3.jar
     scala-reflect-2.0.3.jar
 
-Because scala-library-2.0.3.jar, scala-compiler-2.0.3.jar, and scala-reflect-2.0.3.jar
-will be loaded to your JVM process, if the process is using a different version,
-you may need to manually replace the above jars with the version you need.
+scala-library-2.0.3.jar, scala-compiler-2.0.3.jar, and scala-reflect-2.0.3.jar
+will be loaded to your running JVM process, if they have not been loaded.
+
+Note that, for example, if your process have scala-library-2.0.2 but does not
+have scala-compiler-2.0.2.jar and scala-reflect-2.0.2.jar, for best version
+compatibility safety, you may need to manually download the 2.0.2 jars and
+replace the above 2.0.3 jars with the downloaded ones.
 
 Usage
 -----
