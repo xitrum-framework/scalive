@@ -28,14 +28,14 @@ public class Server {
         ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
 
         try {
-            ClassLoader cl = createClassloader(jarpath, clId);
+            URLClassLoader cl = createClassloader(jarpath, clId);
             if (cl == null) return;
 
             Thread.currentThread().setContextClassLoader(cl);
 
             Class<?> repl = Class.forName("scalive.Repl", true, cl);
-            Method method = repl.getMethod("run", String.class, InputStream.class, OutputStream.class);
-            method.invoke(null, jarpath, in, out);
+            Method method = repl.getMethod("run", URLClassLoader.class, InputStream.class, OutputStream.class);
+            method.invoke(null, cl, in, out);
         } finally {
             Thread.currentThread().setContextClassLoader(oldCl);
             System.setIn(oldIn);
@@ -46,7 +46,7 @@ public class Server {
         }
     }
 
-    private static ClassLoader createClassloader(String jarpath, String clId) throws Exception {
+    private static URLClassLoader createClassloader(String jarpath, String clId) throws Exception {
         Discovery d = new Discovery();
 
         if (clId == null) {
