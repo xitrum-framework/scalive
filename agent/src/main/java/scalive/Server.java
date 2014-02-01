@@ -48,7 +48,7 @@ public class Server {
         addJarToClassLoader(cl, jarpath + "/" + version, "scala-compiler", "scala.tools.nsc.interpreter.ILoop");
         addJarToClassLoader(cl, jarpath + "/" + version, "scala-reflect",  "scala.reflect.runtime.JavaUniverse");
 
-        addJarToClassLoader(cl, jarpath, "scalive-repl",   "scalive.Repl");
+        addJarToClassLoader(cl, jarpath, "scalive-repl", "scalive.Repl");
     }
 
     private static void addJarToClassLoader(
