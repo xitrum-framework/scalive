@@ -1,19 +1,16 @@
 package scalive;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.net.Socket;
-import java.net.URL;
 import java.net.URLClassLoader;
 
-import net.djpowell.liverepl.discovery.ClassLoaderInfo;
-import net.djpowell.liverepl.discovery.Discovery;
-
 public class Server {
-    public static void serve(Socket client, String jarpath, String clId) throws Exception {
+    private static final String DEFAULT_SCALA_VERSION = "2.10.3";
+
+    public static void serve(Socket client, String jarpath) throws Exception {
         InputStream  in  = client.getInputStream();
         OutputStream out = client.getOutputStream();
 
@@ -25,19 +22,14 @@ public class Server {
         System.setOut(new PrintStream(out));
         System.setErr(new PrintStream(out));
 
-        ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
-
         try {
-            URLClassLoader cl = createClassloader(jarpath, clId);
-            if (cl == null) return;
+            URLClassLoader cl = (URLClassLoader) Server.class.getClassLoader();
+            addJarsToClassLoader(cl, jarpath);
 
-            Thread.currentThread().setContextClassLoader(cl);
-
-            Class<?> repl = Class.forName("scalive.Repl", true, cl);
+            Class<?> repl = Class.forName("scalive.Repl");
             Method method = repl.getMethod("run", URLClassLoader.class, InputStream.class, OutputStream.class);
             method.invoke(null, cl, in, out);
         } finally {
-            Thread.currentThread().setContextClassLoader(oldCl);
             System.setIn(oldIn);
             System.setOut(oldOut);
             System.setErr(oldErr);
@@ -46,33 +38,33 @@ public class Server {
         }
     }
 
-    private static URLClassLoader createClassloader(String jarpath, String clId) throws Exception {
-        Discovery d = new Discovery();
+    private static void addJarsToClassLoader(URLClassLoader cl, String jarpath) throws Exception {
+        // Try scala-library first
+        addJarToClassLoader(cl, jarpath + "/" + DEFAULT_SCALA_VERSION, "scala-library", "scala.AnyVal");
 
-        if (clId == null) {
-            if (d.listClassLoaders().size() > 1) {
-                d.dumpList(System.out);
-                return null;
-            } else {
-                clId = "0";
-            }
+        // So that we can get the actual Scala version being used
+        String version = getScalaVersion();
+
+        addJarToClassLoader(cl, jarpath + "/" + version, "scala-compiler", "scala.tools.nsc.interpreter.ILoop");
+        addJarToClassLoader(cl, jarpath + "/" + version, "scala-reflect",  "scala.reflect.runtime.JavaUniverse");
+
+        addJarToClassLoader(cl, jarpath, "scalive-repl",   "scalive.Repl");
+    }
+
+    private static void addJarToClassLoader(
+        URLClassLoader cl, String jarpath, String jarbase, String representativeClass
+    ) throws Exception {
+        try {
+            Class.forName(representativeClass);
+        } catch (ClassNotFoundException e) {
+            System.out.println("[Scalive] Load " + jarbase);
+            Classpath.findAndAddJar(cl, jarpath, jarbase);
         }
+    }
 
-        ClassLoaderInfo cli = d.findClassLoader(clId);
-        if (cli == null) {
-            System.out.println("[Scalive] Could not find class loader: " + clId);
-            return null;
-        }
-
-        ClassLoader cl = cli.getClassLoader();
-
-        URL[] urls = new URL[] {
-            new File(Classpath.findJar(jarpath, "scala-library")).toURI().toURL(),
-            new File(Classpath.findJar(jarpath, "scala-compiler")).toURI().toURL(),
-            new File(Classpath.findJar(jarpath, "scala-reflect")).toURI().toURL(),
-            new File(Classpath.findJar(jarpath, "scalive-repl")).toURI().toURL()
-        };
-        URLClassLoader withScala = new URLClassLoader(urls, cl);
-        return withScala;
+    private static String getScalaVersion() throws Exception {
+        Class<?> k = Class.forName("scala.util.Properties");
+        Method   m = k.getDeclaredMethod("versionNumberString");
+        return (String) m.invoke(k);
     }
 }

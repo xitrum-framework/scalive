@@ -23,9 +23,10 @@ public class Repl {
     // ** For the old behavior pass -usejavacp to scala, or if using a Settings
     // ** object programatically, settings.usejavacp.value = true.
     //
+    // "usejavacp" is not enough because the current classloader has been modified.
+    //
     // http://stackoverflow.com/questions/18150961/scala-runtime-in-compiler-mirror-not-found-but-working-when-started-with-xboo
     Settings settings = new Settings();
-//    settings.processArgumentString("-usejavacp");
     settings.classpath().value_$eq(getClasspath(cl));
 
     ILoop repl = new ILoop(
@@ -42,7 +43,7 @@ public class Repl {
       URL[] urls = cl.getURLs();
       StringBuffer buf = new StringBuffer();
       for (URL url: urls) {
-          if (buf.length() > 0) buf.append(File.pathSeparatorChar);
+          if (buf.length() > 0) buf.append(File.pathSeparator);
           buf.append(url);
       }
       return buf.toString();

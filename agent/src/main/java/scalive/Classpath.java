@@ -38,13 +38,13 @@ public class Classpath {
       throw new Exception("Could not find " + jarbase + " in " + jarpath);
   }
 
-  public static void addPath(ClassLoader cl, String path) throws Exception {
+  public static void addPath(URLClassLoader cl, String path) throws Exception {
       URL url = new File(path).toURI().toURL();
       addURL.invoke(cl, url);
   }
 
   /** Combination of findJar and addPath. */
-  public static void findAndAddJar(ClassLoader cl, String jarpath, String jarbase) throws Exception {
+  public static void findAndAddJar(URLClassLoader cl, String jarpath, String jarbase) throws Exception {
       String jar = findJar(jarpath, jarbase);
       addPath(cl, jar);
   }

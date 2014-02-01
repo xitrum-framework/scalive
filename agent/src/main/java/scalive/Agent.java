@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class Agent {
     /**
-     * @param agentArgs <jarpath> <server port> [class loader id];
+     * @param agentArgs <jarpath> <server port>;
      * jarpath: absolute path to directory that contains scalive-agent.jar,
      * scala-library.jar, scala-compiler.jar, and scala-reflect.jar
      * @throws IOException
@@ -16,7 +16,6 @@ public class Agent {
         final String[] args    = agentArgs.split(" ");
         final String   jarpath = args[0];
         final int      port    = Integer.parseInt(args[1]);
-        final String   clId    = (args.length == 3) ? args[2] : null;
 
         System.out.println("[Scalive] REPL server starts at port " + port);
         final ServerSocket server = new ServerSocket(port);
@@ -32,7 +31,7 @@ public class Agent {
             public void run() {
                 try {
                     Socket client = server.accept();  // Block until a connection comes in
-                    Server.serve(client, jarpath, clId);
+                    Server.serve(client, jarpath);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {

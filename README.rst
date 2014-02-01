@@ -47,19 +47,6 @@ To connect a Scala REPL console to a process:
 
   scalive <pid>
 
-If there are multiple class loaders in the process, Scalive will list them so
-that you can choose:
-
-::
-
-  TODO
-
-Then you run again:
-
-::
-
-  scalive <pid> <class-loader-id>
-
 How it works
 ------------
 
@@ -68,3 +55,11 @@ to tell the target process to load an `agent <http://javahowto.blogspot.jp/2006/
 
 The agent creates a TCP server to let the Scalive process interact with the target
 process. The Scalive process acts as a client.
+
+Known problems
+--------------
+
+SBT
+http://www.scala-lang.org/old/node/8002
+
+Arrow

@@ -4,6 +4,7 @@ package scalive
 import com.sun.tools.attach.VirtualMachine
 
 import java.io.File
+import java.net.URLClassLoader
 
 object AgentLoader {
  /**
@@ -47,7 +48,7 @@ object AgentLoader {
    */
   private def addToolsDotJarToClasspath() {
     val path = System.getProperty("java.home") + "/../lib/tools.jar"
-    Classpath.addPath(ClassLoader.getSystemClassLoader, path)
+    Classpath.addPath(ClassLoader.getSystemClassLoader.asInstanceOf[URLClassLoader], path)
   }
 
   private def listJvmProcesses() {

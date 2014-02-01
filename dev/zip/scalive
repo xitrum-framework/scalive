@@ -11,7 +11,7 @@ else
 fi
 cd "$ROOT_DIR"
 
-CLASS_PATH="$ROOT_DIR/*:."
+CLASS_PATH="$ROOT_DIR/2.10.3/*:$ROOT_DIR/*"
 
 # Use exec to be compatible with daemontools:
 # http://cr.yp.to/daemontools.html
