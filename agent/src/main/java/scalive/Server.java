@@ -38,10 +38,10 @@ public class Server {
             if (parentCl == null) return;
 
             URLClassLoader cl        = createClassLoaderWithReplJars(jarpath, parentCl);
-            Class<?>       repl      = Class.forName("scalive.Repl", true, cl);
-            Method         method    = repl.getMethod("run", String.class, InputStream.class, OutputStream.class);
             String         classpath = getClasspathForRepl(cl, parentCl);
-            method.invoke(null, classpath, in, out);
+            Class<?>       repl      = Class.forName("scalive.Repl", true, cl);
+            Method         method    = repl.getMethod("run", ClassLoader.class, String.class, InputStream.class, OutputStream.class);
+            method.invoke(null, cl, classpath, in, out);
         } finally {
             System.setIn(oldIn);
             System.setOut(oldOut);
