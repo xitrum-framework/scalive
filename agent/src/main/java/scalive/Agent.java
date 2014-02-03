@@ -45,15 +45,10 @@ public class Agent {
             public void run() {
                 try {
                     Socket client = server.accept();  // Block until a connection comes in
+                    server.close();                   // Accept no other clients
                     Server.serve(client, jarpath, clId);
                 } catch (Exception e) {
                     e.printStackTrace();
-                } finally {
-                    try {
-                        server.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         }).start();
