@@ -8,6 +8,8 @@ scalaVersion := "2.10.3"
 
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked")
 
+javacOptions ++= Seq("-Xlint:deprecation")
+
 // Add tools.jar to classpath
 // https://blogs.oracle.com/CoreJavaTechTips/entry/the_attach_api
 unmanagedJars in Compile := (file(System.getProperty("java.home")) / ".." / "lib" * "tools.jar").classpath
