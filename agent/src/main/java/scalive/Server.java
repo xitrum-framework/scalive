@@ -137,8 +137,8 @@ public class Server {
     // http://www.scala-sbt.org/release/api/index.html#sbt.classpath.ClasspathFilter
     private static String sbtGetClasspathFromClasspathFilter(URLClassLoader withReplJars, ClassLoader parentCl) throws Exception {
         ClassLoader mainClassLoader      = sbtFindMainClassLoader();
-        Class<?>    ClasspathFilterClass = Class.forName("sbt.classpath.ClasspathFilter", true, mainClassLoader);
-        Field       classpathField       = ClasspathFilterClass.getDeclaredField("classpath");
+        Class<?>    classpathFilterClass = Class.forName("sbt.classpath.ClasspathFilter", true, mainClassLoader);
+        Field       classpathField       = classpathFilterClass.getDeclaredField("classpath");
         classpathField.setAccessible(true);
 
         Object   set      = classpathField.get(parentCl);
