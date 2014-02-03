@@ -86,12 +86,12 @@ It's easy when the class loader is of type `URLClassLoader <http://docs.oracle.c
 when the process is started by `SBT <http://www.scala-sbt.org/>`_), Scalive must
 solve the problem in the "case by case" style.
 
-Currently, Scalive only supports:
+Currently, Scalive only supports these process types:
 
-* Single class loader process (normal standalone JVM process, like
+* Process with only one class loader (normal standalone JVM process, like
   `Play <http://www.playframework.com/>`_ or
   `Xitrum <http://ngocdaothanh.github.io/xitrum/>`_).
-* SBT.
+* Process started by SBT ``run``.
 
 If your process/class loader is not supported, please `create an issue <https://github.com/ngocdaothanh/scalive/issues>`_.
 

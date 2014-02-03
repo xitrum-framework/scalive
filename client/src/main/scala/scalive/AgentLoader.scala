@@ -8,9 +8,23 @@ import java.net.URLClassLoader
 
 object AgentLoader {
  /**
-   * @param args <jarpath> [class loader id];
-   * jarpath: absolute path to directory that contains scalive-agent.jar,
-   * scala-library.jar, scala-compiler.jar, and scala-reflect.jar
+   * @param args <jarpath> [class loader id]
+   *
+   * jarpath is the absolute path this directory:
+   *
+   * {{{
+   * jarpath/
+   *   scalive-agent.jar
+   *   scalive-client.jar
+   *   scalive-repl.jar
+   *
+   *   2.10.3/
+   *     scala-library.jar
+   *     scala-compiler.jar
+   *     scala-reflect.jar
+   *
+   *   [Other Scala versions]
+   * }}}
    */
   def main(args: Array[String]) {
     if (args.length != 1 && args.length != 2 && args.length != 3) {
