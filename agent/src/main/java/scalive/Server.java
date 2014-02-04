@@ -156,7 +156,7 @@ public class Server {
         // Thread Context Class Loaders:
         //
         // #Id  ClassLoader          Info
-        // 1   URLClassLoader        main #1 [main]  <--- Take out this one
+        // 1   URLClassLoader        main #1 [main]  <--- Take out this one (Info is not always "main #1 [main]")
         // 2   ClasspathFilter       xitrum-akka.actor.default-dispatcher-2 #31 [run-main-group-0]
 
         Collection<ClassLoaderInfo> clis = DISCOVERY.listClassLoaders();
@@ -164,7 +164,7 @@ public class Server {
             ClassLoader cl   = cli.getClassLoader();
             String      name = cli.getClassLoaderName();
 
-            // Can't use info because it can be "process reaper #8 [system]" etc.
+            // Can't use info because it's not fixed; can be "process reaper #8 [system]" etc.
             boolean mainClassLoader = cl instanceof URLClassLoader && "URLClassLoader".equals(name);
 
             if (mainClassLoader) return cl;
