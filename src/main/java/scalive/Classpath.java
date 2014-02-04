@@ -27,17 +27,20 @@ public class Classpath {
      *
      * @param jarbase Ex: "scalive-agent", not "scalive-agent-1.0.jar"
      */
-    public static String findJar(String jarpath, String jarbase) throws Exception {
-        File   dir   = new File(jarpath);
-        File[] files = dir.listFiles();
+    public static String findJar(String[] jarpaths, String jarbase) throws Exception {
+        for (String jarpath: jarpaths) {
+            File   dir   = new File(jarpath);
+            File[] files = dir.listFiles();
 
-        for (int i = 0; i < files.length; i++) {
-            File   file = files[i];
-            String name = file.getName();
-            if (file.isFile() && name.endsWith(".jar") && name.startsWith(jarbase))
-                return file.getPath();
+            for (int i = 0; i < files.length; i++) {
+                File   file = files[i];
+                String name = file.getName();
+                if (file.isFile() && name.endsWith(".jar") && name.startsWith(jarbase))
+                    return file.getPath();
+            }
         }
-        throw new Exception("Could not find " + jarbase + " in " + jarpath);
+
+        throw new Exception("Could not find " + jarbase + " in " + join(jarpaths, File.pathSeparator));
     }
 
     public static void addPath(URLClassLoader cl, String path) throws Exception {
@@ -46,36 +49,40 @@ public class Classpath {
     }
 
     /** Combination of findJar and addPath. */
-    public static void findAndAddJar(URLClassLoader cl, String jarpath, String jarbase) throws Exception {
-        String jar = findJar(jarpath, jarbase);
+    public static void findAndAddJar(URLClassLoader cl, String[] jarpaths, String jarbase) throws Exception {
+        String jar = findJar(jarpaths, jarbase);
         addPath(cl, jar);
     }
 
     public static void addJarToURLClassLoader(
-        URLClassLoader cl, String jarpath, String jarbase, String representativeClass
+        URLClassLoader cl, String[] jarpaths, String jarbase, String representativeClass
     ) throws Exception {
         try {
             Class.forName(representativeClass, true, cl);
         } catch (ClassNotFoundException e) {
             System.out.println("[Scalive] Load " + jarbase);
-            Classpath.findAndAddJar(cl, jarpath, jarbase);
+            Classpath.findAndAddJar(cl, jarpaths, jarbase);
         }
     }
 
     // http://stackoverflow.com/questions/4121567/embedded-scala-repl-inherits-parent-classpath
     public static String getURLClasspath(URLClassLoader cl) {
         URL[] urls = cl.getURLs();
-        StringBuffer buf = new StringBuffer();
-        for (URL url: urls) {
-            if (buf.length() > 0) buf.append(File.pathSeparator);
-            buf.append(url);
-        }
-        return buf.toString();
+        return join(urls, File.pathSeparator);
     }
 
     public static String getScalaVersion(ClassLoader cl) throws Exception {
         Class<?> k = Class.forName("scala.util.Properties", true, cl);
         Method   m = k.getDeclaredMethod("versionNumberString");
         return (String) m.invoke(k);
+    }
+
+    private static String join(Object[] xs, String separator) {
+        StringBuffer buf = new StringBuffer();
+        for (Object x: xs) {
+            if (buf.length() > 0) buf.append(separator);
+            buf.append(x);
+        }
+        return buf.toString();
     }
 }

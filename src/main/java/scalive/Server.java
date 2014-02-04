@@ -11,7 +11,7 @@ public class Server {
     // Load this Scala version if Scala has not been loaded in the target process
     private static final String DEFAULT_SCALA_VERSION = "2.10.3";
 
-    public static void serve(Socket client, String jarpath) throws Exception {
+    public static void serve(Socket client, String[] jarpaths) throws Exception {
         InputStream  in  = client.getInputStream();
         OutputStream out = client.getOutputStream();
 
@@ -25,7 +25,7 @@ public class Server {
 
         try {
             URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            addJarsToURLClassLoader(cl, jarpath);
+            addJarsToURLClassLoader(cl, jarpaths);
 
             String   classpath = Classpath.getURLClasspath(cl);
             Class<?> repl      = Class.forName("scalive.Repl");
@@ -40,16 +40,16 @@ public class Server {
         }
     }
 
-    private static void addJarsToURLClassLoader(URLClassLoader cl, String jarpath) throws Exception {
+    private static void addJarsToURLClassLoader(URLClassLoader cl, String[] jarpaths) throws Exception {
         // Try scala-library first
-        Classpath.addJarToURLClassLoader(cl, jarpath, "scala-library-" + DEFAULT_SCALA_VERSION, "scala.AnyVal");
+        Classpath.addJarToURLClassLoader(cl, jarpaths, "scala-library-" + DEFAULT_SCALA_VERSION, "scala.AnyVal");
 
         // So that we can get the actual Scala version being used
         String version = Classpath.getScalaVersion(cl);
 
-        Classpath.addJarToURLClassLoader(cl, jarpath, "scala-reflect-"  + version, "scala.reflect.runtime.JavaUniverse");
-        Classpath.addJarToURLClassLoader(cl, jarpath, "scala-compiler-" + version, "scala.tools.nsc.interpreter.ILoop");
+        Classpath.addJarToURLClassLoader(cl, jarpaths, "scala-reflect-"  + version, "scala.reflect.runtime.JavaUniverse");
+        Classpath.addJarToURLClassLoader(cl, jarpaths, "scala-compiler-" + version, "scala.tools.nsc.interpreter.ILoop");
 
-        Classpath.addJarToURLClassLoader(cl, jarpath, "scalive", "scalive.Repl");
+        Classpath.addJarToURLClassLoader(cl, jarpaths, "scalive", "scalive.Repl");
     }
 }

@@ -1,12 +1,13 @@
 package scalive;
 
+import java.io.File;
 import java.lang.instrument.Instrumentation;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Agent {
     /**
-     * @param agentArgs <jarpath> <server port>
+     * @param agentArgs <jarpath1>[<File.pathSeparator><jarpath2>...] <server port>
      *
      * jarpath is the absolute path this directory:
      *
@@ -22,9 +23,9 @@ public class Agent {
      * }}}
      */
     public static void agentmain(String agentArgs, Instrumentation inst) throws Exception {
-        final String[] args    = agentArgs.split(" ");
-        final String   jarpath = args[0];
-        final int      port    = Integer.parseInt(args[1]);
+        final String[] args     = agentArgs.split(" ");
+        final String[] jarpaths = args[0].split(File.pathSeparator);
+        final int      port     = Integer.parseInt(args[1]);
 
         System.out.println("[Scalive] REPL server starts at port " + port);
         final ServerSocket server = new ServerSocket(port);
@@ -41,7 +42,7 @@ public class Agent {
                 try {
                     Socket client = server.accept();  // Block until a connection comes in
                     server.close();                   // Accept no other clients
-                    Server.serve(client, jarpath);
+                    Server.serve(client, jarpaths);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

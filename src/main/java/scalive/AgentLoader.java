@@ -4,12 +4,13 @@ package scalive;
 import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
 
+import java.io.File;
 import java.net.URLClassLoader;
 import java.util.Iterator;
 
 public class AgentLoader {
     /**
-     * @param args <jarpath> [pid]
+     * @param args <jarpath1>[<File.pathSeparator><jarpath2>...] [pid]
      *
      * jarpath is the absolute path this directory:
      *
@@ -28,7 +29,7 @@ public class AgentLoader {
      */
     public static void main(String[] args) throws Exception {
         if (args.length != 1 && args.length != 2) {
-            System.out.println("Arguments: <jarpath> [pid]");
+            System.out.println("Arguments: <jarpath1>[<File.pathSeparator><jarpath2>...] [pid]");
             return;
         }
 
@@ -39,9 +40,9 @@ public class AgentLoader {
             return;
         }
 
-        String jarpath = args[0];
-        String pid     = args[1];
-        loadAgent(jarpath, pid);
+        String jarpaths = args[0];
+        String pid      = args[1];
+        loadAgent(jarpaths, pid);
     }
 
     /**
@@ -75,12 +76,13 @@ public class AgentLoader {
         }
     }
 
-    private static void loadAgent(String jarpath, String pid) throws Exception {
-        final String         agentJar = Classpath.findJar(jarpath, "scalive");
+    private static void loadAgent(String jarpaths, String pid) throws Exception {
+        final String[]       ary      = jarpaths.split(File.pathSeparator);
+        final String         agentJar = Classpath.findJar(ary, "scalive");
         final VirtualMachine vm       = VirtualMachine.attach(pid);
         final int            port     = Client.getFreePort();
 
-        vm.loadAgent(agentJar, jarpath + " " + port);
+        vm.loadAgent(agentJar, jarpaths + " " + port);
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override public void run() {
                 try {
