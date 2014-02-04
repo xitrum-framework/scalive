@@ -1,7 +1,7 @@
 This tool allows you to connect a Scala REPL console to running Oracle (Sun)
 JVM processes without any prior setup at the target process.
 
-**`View demo video on YouTube <http://youtu.be/h45QQ45D9P8>`_**
+`**View demo video on YouTube** <http://youtu.be/h45QQ45D9P8>`_
 
 .. image:: youtube.jpg
 
