@@ -2,7 +2,7 @@ organization := "tv.cntt"
 
 name         := "scalive"
 
-version      := "1.0-SNAPSHOT"
+version      := "1.1-SNAPSHOT"
 
 autoScalaLibrary := false
 

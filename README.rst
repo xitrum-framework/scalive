@@ -3,13 +3,13 @@ process without any prior setup at the target process.
 
 If you want a Clojure REPL console, try `liverepl <https://github.com/djpowell/liverepl>`_.
 
-TODO: Add a YouTube video here
-http://stackoverflow.com/questions/4279611/how-to-embed-a-video-into-github-readme-md
-
 Download
 --------
 
-Extract `scalive-1.0.zip <TODO>`_, you will see:
+Download and extract
+`scalive-1.0.zip <https://drive.google.com/folderview?id=0B4nP_B5KDxyPdW9xLU5USVJoSzg>`_
+(if you're using enterprise GMail account, you may need to log out to download),
+you will see:
 
 ::
 
