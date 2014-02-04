@@ -21,9 +21,9 @@ public class Repl {
         // ** For the old behavior pass -usejavacp to scala, or if using a Settings
         // ** object programatically, settings.usejavacp.value = true.
         //
-        // "usejavacp" (System.getProperty("scala.class.path")) is not enough when
+        // "usejavacp" (System.getProperty("java.class.path")) is not enough when
         // there are multiple class loaders (and even when there's only one class
-        // loader but the "scala.class.path" system property does not contain Scala JARs
+        // loader but the "java.class.path" system property does not contain Scala JARs
         //
         // http://stackoverflow.com/questions/18150961/scala-runtime-in-compiler-mirror-not-found-but-working-when-started-with-xboo
         Settings settings = new Settings();

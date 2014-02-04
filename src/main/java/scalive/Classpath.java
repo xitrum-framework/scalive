@@ -61,4 +61,21 @@ public class Classpath {
             Classpath.findAndAddJar(cl, jarpath, jarbase);
         }
     }
+
+    // http://stackoverflow.com/questions/4121567/embedded-scala-repl-inherits-parent-classpath
+    public static String getURLClasspath(URLClassLoader cl) {
+        URL[] urls = cl.getURLs();
+        StringBuffer buf = new StringBuffer();
+        for (URL url: urls) {
+            if (buf.length() > 0) buf.append(File.pathSeparator);
+            buf.append(url);
+        }
+        return buf.toString();
+    }
+
+    public static String getScalaVersion(ClassLoader cl) throws Exception {
+        Class<?> k = Class.forName("scala.util.Properties", true, cl);
+        Method   m = k.getDeclaredMethod("versionNumberString");
+        return (String) m.invoke(k);
+    }
 }

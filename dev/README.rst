@@ -5,20 +5,18 @@ zip directory is the directory that will be zipped when Scalive is released.
   zip/
     scalive
     scalive.bat
-    scalive-client_2.10-1.0-SNAPSHOT.jar -> ../../client/target/scala-2.10/scalive-client_2.10-1.0-SNAPSHOT.jar
-    scalive-agent_2.10-1.0-SNAPSHOT.jar -> ../../agent/target/scala-2.10/scalive-agent_2.10-1.0-SNAPSHOT.jar
-    scalive-repl_2.10-1.0-SNAPSHOT.jar -> ../../repl/target/scala-2.10/scalive-repl_2.10-1.0-SNAPSHOT.jar
-    2.10.3/
-      scala-library-2.10.3.jar
-      scala-compiler-2.10.3.jar
-      scala-reflect-2.10.3.jar
-    2.10.2/
-      scala-library-2.10.2.jar
-      scala-compiler-2.10.2.jar
-      scala-reflect-2.10.2.jar
+    scalive_2.10-1.0-SNAPSHOT.jar -> ../../target/scala-2.10/scalive_2.10-1.0-SNAPSHOT.jar
+
+    scala-library-2.10.2.jar
+    scala-compiler-2.10.2.jar
+    scala-reflect-2.10.2.jar
+
+    scala-library-2.10.3.jar
+    scala-compiler-2.10.3.jar
+    scala-reflect-2.10.3.jar
 
 While developing:
 
-* Add missing jar files as above
-* Run ``sbt package`` in subprojects to update their jar files
+* Run ``sbt package`` to create/update scalive.jar
+* Add missing JARs as above
 * Run ``scalive`` to test
