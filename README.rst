@@ -1,11 +1,9 @@
-This tool allows you to connect a Scala REPL console to a running Oracle (Sun)
-JVM process without any prior setup at the target process.
+This tool allows you to connect a Scala REPL console to running Oracle (Sun)
+JVM processes without any prior setup at the target process.
 
-.. raw:: html
+**`View demo video on YouTube <http://youtu.be/h45QQ45D9P8>`_**
 
-  <a href="http://youtu.be/h45QQ45D9P8" title="View demo video on YouTube">
-    <img src="youtube.jpg" />
-  </a>
+.. image:: youtube.jpg
 
 Download
 --------
@@ -17,7 +15,7 @@ you will see:
 
 ::
 
-  scalive/
+  scalive-1.0/
     scalive
     scalive.bat
     scalive-1.0.jar
@@ -33,8 +31,8 @@ you will see:
 scala-library, scala-compiler, and scala-reflect of the appropriate version
 will be loaded to your running JVM process, if they have not been loaded.
 
-For convenience, Scala 2.10.2 and 2.10.3 JARs are preincluded. If your Scala
-process is using a different version, you need to manually download the
+For convenience, Scala 2.10.2 and 2.10.3 JARs are preincluded. If your process
+is using a different Scala version, you need to manually download the
 corresponding JARs and save them as above.
 
 Usage
@@ -42,7 +40,7 @@ Usage
 
 Run the shell script ``scalive`` (*nix) or ``scalive.bat`` (Windows).
 
-To see a list of running JVM processes and their process ids:
+To see a list of running JVM processes and their process IDs:
 
 ::
 
