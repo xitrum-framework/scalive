@@ -23,9 +23,9 @@ public class Classpath {
     //--------------------------------------------------------------------------
 
     /**
-     * @param jarpath Directory containing the jar
+     * @param jarpaths Directories to search for the JAR
      *
-     * @param jarbase Ex: "scalive-agent", not "scalive-agent-1.0.jar"
+     * @param jarbase JAR file name prefix; Ex: "scalive-agent" will match "scalive-agent-xxx.jar"
      */
     public static String findJar(String[] jarpaths, String jarbase) throws Exception {
         for (String jarpath: jarpaths) {
@@ -54,6 +54,10 @@ public class Classpath {
         addPath(cl, jar);
     }
 
+    /**
+     * Similar to findAndAddJar, but only add the JAR to classpath if the
+     * representativeClass has not been loaded.
+     */
     public static void addJarToURLClassLoader(
         URLClassLoader cl, String[] jarpaths, String jarbase, String representativeClass
     ) throws Exception {
