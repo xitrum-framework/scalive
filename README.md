@@ -51,7 +51,8 @@ scalive <pid>
 
 Scalive only automatically adds `scala-library.jar`, `scala-compiler.jar`,
 `scala-reflect.jar`, and `scalive.jar` to the system classpath. If you want to
-load additional classes in other JARs, first add the JAR to the system class loader:
+load additional classes in other JARs, first run these in the REPL console to
+add the JAR to the system class loader:
 
 ```
 val cl         = ClassLoader.getSystemClassLoader.asInstanceOf[java.net.URLClassLoader]
@@ -60,8 +61,8 @@ val jarbase    = "mylib"  // Will match "mylibxxx.jar", convenient when there's 
 scalive.Classpath.findAndAddJar(cl, searchDirs, jarbase)
 ```
 
-Now the trick is just quit the REPL console and open it again. You will be able
-to use your classes in the JAR as normal:
+Now the trick is just quit the REPL console and connect it to the target process
+again. You will be able to use your classes in the JAR as normal:
 
 ```
 import mylib.foo.Bar
