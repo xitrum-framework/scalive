@@ -48,7 +48,28 @@ To connect a Scala REPL console to a process:
 scalive <pid>
 ```
 
-## How it works
+## How to add your own JARs
+
+Scalive only automatically loads `scala-library.jar`, `scala-compiler.jar`, and
+`scala-reflect.jar`. If you want to load additional classes in other JARs, first
+add the JAR to the system class loader:
+
+```
+val cl         = ClassLoader.getSystemClassLoader.asInstanceOf[java.net.URLClassLoader]
+val searchDirs = Array("/dir/containing/the/jar")
+val jarbase    = "mylib"  // Will match "mylibxxx.jar", convenient when there's version number in the file name
+scalive.Classpath.findAndAddJar(cl, searchDirs, jarbase)
+```
+
+Now the trick is just quit the REPL console and open it again. You will be able
+to use your classes in the JAR as normal:
+
+```
+import mylib.foo.Bar
+...
+```
+
+## How Scalive works
 
 Scalive uses the [Attach API](https://blogs.oracle.com/CoreJavaTechTips/entry/the_attach_api)
 to tell the target process to load an [agent](http://javahowto.blogspot.jp/2006/07/javaagent-option.html).
