@@ -1,3 +1,20 @@
+Control flow
+------------
+
+::
+
+  AgentLoader ----- attaches Agent ---------------> Target process
+                    passes:                         * Agent loads Server
+                    * TCP port                      * Server listens on the
+                    * jarpaths                        specified TCP port
+
+::
+
+  AgentLoader ----- Client connects to the port --> Target process
+                                                    * Server loads Repl
+              ----- Keyboard input              -->
+              <---- Repl output                 ---
+
 zip directory
 -------------
 
@@ -24,19 +41,29 @@ While developing:
 * Add missing JARs as above
 * Run ``scalive`` to test
 
-Control flow
-------------
+Release
+-------
+
+Based on the ``zip`` directory above, prepare a directory to be zipped and
+released (remember to remove uneccessary files, like .gitignore):
 
 ::
 
-  AgentLoader ----- attaches Agent ---------------> Target process
-                    passes:                         * Agent loads Server
-                    * TCP port                      * Server listens on the
-                    * jarpaths                        specified TCP port
+  scalive-<version>/
+    scalive
+    scalive.bat
+    scalive-<version>.jar  <-- Doesn't depend on Scala, thus doesn't follow Scala JAR naming
+
+    scala-library-2.10.2.jar
+    scala-compiler-2.10.2.jar
+    scala-reflect-2.10.2.jar
+
+    scala-library-2.10.3.jar
+    scala-compiler-2.10.3.jar
+    scala-reflect-2.10.3.jar
+
+Then zip it:
 
 ::
 
-  AgentLoader ----- Client connects to the port --> Target process
-                                                    * Server loads Repl
-              ----- Keyboard input              -->
-              <---- Repl output                 ---
+  zip -r scalive-<version>.zip scalive-<version>
