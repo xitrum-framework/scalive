@@ -69,6 +69,8 @@ import mylib.foo.Bar
 ...
 ```
 
+[Note that `:cp` doesn't work](http://stackoverflow.com/questions/18033752/cannot-add-a-jar-to-scala-repl-with-the-cp-command).
+
 ## How Scalive works
 
 Scalive uses the [Attach API](https://blogs.oracle.com/CoreJavaTechTips/entry/the_attach_api)
