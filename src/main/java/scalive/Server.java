@@ -27,7 +27,7 @@ public class Server {
             URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
             addJarsToURLClassLoader(cl, jarpaths);
 
-            String   classpath = Classpath.getURLClasspath(cl);
+            String   classpath = Classpath.getClasspath(cl);
             Class<?> repl      = Class.forName("scalive.Repl");
             Method   method    = repl.getMethod("run", ClassLoader.class, String.class, InputStream.class, OutputStream.class);
             method.invoke(null, cl, classpath, in, out);
@@ -42,14 +42,14 @@ public class Server {
 
     private static void addJarsToURLClassLoader(URLClassLoader cl, String[] jarpaths) throws Exception {
         // Try scala-library first
-        Classpath.addJarToURLClassLoader(cl, jarpaths, "scala-library-" + DEFAULT_SCALA_VERSION, "scala.AnyVal");
+        Classpath.findAndAddJar(cl, jarpaths, "scala-library-" + DEFAULT_SCALA_VERSION, "scala.AnyVal");
 
         // So that we can get the actual Scala version being used
         String version = Classpath.getScalaVersion(cl);
 
-        Classpath.addJarToURLClassLoader(cl, jarpaths, "scala-reflect-"  + version, "scala.reflect.runtime.JavaUniverse");
-        Classpath.addJarToURLClassLoader(cl, jarpaths, "scala-compiler-" + version, "scala.tools.nsc.interpreter.ILoop");
+        Classpath.findAndAddJar(cl, jarpaths, "scala-reflect-"  + version, "scala.reflect.runtime.JavaUniverse");
+        Classpath.findAndAddJar(cl, jarpaths, "scala-compiler-" + version, "scala.tools.nsc.interpreter.ILoop");
 
-        Classpath.addJarToURLClassLoader(cl, jarpaths, "scalive", "scalive.Repl");
+        Classpath.findAndAddJar(cl, jarpaths, "scalive", "scalive.Repl");
     }
 }
