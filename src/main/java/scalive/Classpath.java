@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 
 public class Classpath {
     private static Method addURL = getAddURL();
@@ -44,8 +45,9 @@ public class Classpath {
     }
 
     public static void addPath(URLClassLoader cl, String path) throws Exception {
-        URL url = new File(path).toURI().toURL();
-        addURL.invoke(cl, url);
+        URL   url  = new File(path).toURI().toURL();
+        URL[] urls = cl.getURLs();
+        if (!Arrays.asList(urls).contains(url)) addURL.invoke(cl, url);
     }
 
     /** Combination of findJar and addPath. */
