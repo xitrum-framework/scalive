@@ -6,8 +6,7 @@ JVM processes without any prior setup at the target process.
 ## Download
 
 Download and extract
-[scalive-1.0.zip](https://drive.google.com/folderview?id=0B4nP_B5KDxyPdW9xLU5USVJoSzg)
-(if you're using enterprise GMail account, you may need to log out to download),
+[scalive-1.0.zip](https://github.com/ngocdaothanh/scalive/releases/download/v1.0/scalive-1.0.zip),
 you will see:
 
 ```
