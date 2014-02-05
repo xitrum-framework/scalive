@@ -50,9 +50,9 @@ scalive <pid>
 
 ## How to add your own JARs
 
-Scalive only automatically loads `scala-library.jar`, `scala-compiler.jar`, and
-`scala-reflect.jar`. If you want to load additional classes in other JARs, first
-add the JAR to the system class loader:
+Scalive only automatically adds `scala-library.jar`, `scala-compiler.jar`,
+`scala-reflect.jar`, and `scalive.jar` to the system classpath. If you want to
+load additional classes in other JARs, first add the JAR to the system class loader:
 
 ```
 val cl         = ClassLoader.getSystemClassLoader.asInstanceOf[java.net.URLClassLoader]
