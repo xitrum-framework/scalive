@@ -8,6 +8,12 @@ autoScalaLibrary := false
 
 javacOptions ++= Seq("-Xlint:deprecation")
 
+// Ensure Scalive can run on Java 6
+scalacOptions += "-target:jvm-1.6"
+
+// Ensure Scalive can run on Java 6
+javacOptions ++= Seq("-source", "1.6", "-target", "1.6")
+
 // Add tools.jar to classpath
 // https://blogs.oracle.com/CoreJavaTechTips/entry/the_attach_api
 unmanagedJars in Compile := (file(System.getProperty("java.home")) / ".." / "lib" * "tools.jar").classpath
