@@ -24,7 +24,7 @@ This is the directory that will be zipped when Scalive is released.
 
   zip/
     scalive
-    scalive.bat
+    scalive.cmd
     scalive_2.10-1.0-SNAPSHOT.jar -> ../../target/scala-2.10/scalive_2.10-1.0-SNAPSHOT.jar
 
     scala-library-2.10.2.jar
@@ -51,7 +51,7 @@ released (remember to remove uneccessary files, like .gitignore):
 
   scalive-<version>/
     scalive
-    scalive.bat
+    scalive.cmd
     scalive-<version>.jar  <-- Doesn't depend on Scala, thus doesn't follow Scala JAR naming
 
     scala-library-2.10.2.jar
