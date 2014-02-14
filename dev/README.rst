@@ -7,7 +7,7 @@ This is the directory that will be zipped when Scalive is released.
 
   zip/
     scalive
-    scalive.bat
+    scalive.cmd
     scalive_2.10-1.0-SNAPSHOT.jar -> ../../target/scala-2.10/scalive_2.10-1.0-SNAPSHOT.jar
 
     scala-library-2.10.2.jar

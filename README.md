@@ -12,7 +12,7 @@ you will see:
 ```
 scalive-1.0/
   scalive
-  scalive.bat
+  scalive.cmd
   scalive-1.0.jar
 
   scala-library-2.10.2.jar
@@ -33,7 +33,7 @@ corresponding JARs and save them as above.
 
 ## Usage
 
-Run the shell script `scalive` (*nix) or `scalive.bat` (Windows).
+Run the shell script `scalive` (*nix) or `scalive.cmd` (Windows).
 
 To see a list of running JVM processes and their process IDs:
 
