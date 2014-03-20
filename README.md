@@ -92,8 +92,9 @@ without additional class loaders (Ex: normal standalone JVM processes, like
 [Play](http://www.playframework.com/) or
 [Xitrum](http://ngocdaothanh.github.io/xitrum/) in production mode).
 
-Processes with multiple class loaders like
-[SBT](http://www.scala-sbt.org/) are not supported.
+Processes with multiple class loaders like Tomcat or
+[SBT](http://www.scala-sbt.org/) are not supported (with SBT, you already has
+the SBT console, so it's not a big deal).
 
 2.
 
