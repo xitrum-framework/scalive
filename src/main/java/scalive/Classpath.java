@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 
 public class Classpath {
     private static Method addURL = getAddURL();
@@ -44,8 +45,9 @@ public class Classpath {
     }
 
     public static void addPath(URLClassLoader cl, String path) throws Exception {
-        URL url = new File(path).toURI().toURL();
-        addURL.invoke(cl, url);
+        URL   url  = new File(path).toURI().toURL();
+        URL[] urls = cl.getURLs();
+        if (!Arrays.asList(urls).contains(url)) addURL.invoke(cl, url);
     }
 
     /** Combination of findJar and addPath. */
@@ -55,22 +57,22 @@ public class Classpath {
     }
 
     /**
-     * Similar to findAndAddJar, but only add the JAR to classpath if the
-     * representativeClass has not been loaded.
+     * Similar to findAndAddJar without representativeClass, but only find and
+     * add the JAR to classpath if the representativeClass has not been loaded.
      */
-    public static void addJarToURLClassLoader(
+    public static void findAndAddJar(
         URLClassLoader cl, String[] jarpaths, String jarbase, String representativeClass
     ) throws Exception {
         try {
             Class.forName(representativeClass, true, cl);
         } catch (ClassNotFoundException e) {
             System.out.println("[Scalive] Load " + jarbase);
-            Classpath.findAndAddJar(cl, jarpaths, jarbase);
+            findAndAddJar(cl, jarpaths, jarbase);
         }
     }
 
     // http://stackoverflow.com/questions/4121567/embedded-scala-repl-inherits-parent-classpath
-    public static String getURLClasspath(URLClassLoader cl) {
+    public static String getClasspath(URLClassLoader cl) {
         URL[] urls = cl.getURLs();
         return join(urls, File.pathSeparator);
     }
@@ -80,6 +82,8 @@ public class Classpath {
         Method   m = k.getDeclaredMethod("versionNumberString");
         return (String) m.invoke(k);
     }
+
+    //--------------------------------------------------------------------------
 
     private static String join(Object[] xs, String separator) {
         StringBuffer buf = new StringBuffer();
