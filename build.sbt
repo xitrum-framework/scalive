@@ -2,7 +2,9 @@ organization := "tv.cntt"
 
 name         := "scalive"
 
-version      := "1.1-SNAPSHOT"
+version      := "1.2-SNAPSHOT"
+
+scalaVersion := "2.11.0"
 
 autoScalaLibrary := false
 
@@ -18,7 +20,7 @@ javacOptions ++= Seq("-source", "1.6", "-target", "1.6")
 // https://blogs.oracle.com/CoreJavaTechTips/entry/the_attach_api
 unmanagedJars in Compile := (file(System.getProperty("java.home")) / ".." / "lib" * "tools.jar").classpath
 
-libraryDependencies += "org.scala-lang" % "scala-compiler" % "2.10.3"
+libraryDependencies += "org.scala-lang" % "scala-compiler" % "2.11.0"
 
 packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
   "Main-Class"  -> "scalive.AgentLoader",

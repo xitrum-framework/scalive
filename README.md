@@ -6,14 +6,14 @@ JVM processes without any prior setup at the target process.
 ## Download
 
 Download and extract
-[scalive-1.1.zip](https://github.com/ngocdaothanh/scalive/releases/download/v1.1/scalive-1.1.zip),
+[scalive-1.2.zip](https://github.com/ngocdaothanh/scalive/releases/download/v1.2/scalive-1.2.zip),
 you will see:
 
 ```
-scalive-1.1/
+scalive-1.2/
   scalive
   scalive.cmd
-  scalive-1.1.jar
+  scalive-1.2.jar
 
   scala-library-2.10.3.jar
   scala-compiler-2.10.3.jar
@@ -22,13 +22,17 @@ scalive-1.1/
   scala-library-2.10.4.jar
   scala-compiler-2.10.4.jar
   scala-reflect-2.10.4.jar
+
+  scala-library-2.11.0.jar
+  scala-compiler-2.11.0.jar
+  scala-reflect-2.11.0.jar
 ```
 
 scala-library, scala-compiler, and scala-reflect of the appropriate version
 will be loaded to your running JVM process, if they have not been loaded.
 
-For convenience, Scala 2.10.3 and 2.10.4 JARs are preincluded. If your process
-is using a different Scala version, you need to manually download the
+For convenience, Scala 2.10.3, 2.10.4, and 2.11.0 JARs are preincluded. If your
+process is using a different Scala version, you need to manually download the
 corresponding JARs and save them as above.
 
 ## Usage
