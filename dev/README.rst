@@ -35,6 +35,10 @@ This is the directory that will be zipped when Scalive is released.
     scala-compiler-2.10.4.jar
     scala-reflect-2.10.4.jar
 
+    scala-library-2.11.0.jar
+    scala-compiler-2.11.0.jar
+    scala-reflect-2.11.0.jar
+
 While developing:
 
 * Run ``sbt package`` to create/update scalive.jar

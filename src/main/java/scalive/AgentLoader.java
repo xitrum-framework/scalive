@@ -16,13 +16,11 @@ public class AgentLoader {
      *
      * {{{
      * jarpath/
-     *   scalive-agent.jar
-     *   scalive-client.jar
-     *   scalive-repl.jar
+     *   scalive.jar
      *
-     *   scala-library-2.10.3.jar
-     *   scala-compiler-2.10.3.jar
-     *   scala-reflect-2.10.3.jar
+     *   scala-library-2.11.0.jar
+     *   scala-compiler-2.11.0.jar
+     *   scala-reflect-2.11.0.jar
      *
      *   [Other Scala versions]
      * }}}
