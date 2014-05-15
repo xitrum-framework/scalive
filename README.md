@@ -6,7 +6,7 @@ JVM processes without any prior setup at the target process.
 ## Download
 
 Download and extract
-[scalive-1.2.zip](https://github.com/ngocdaothanh/scalive/releases/download/v1.2/scalive-1.2.zip),
+[scalive-1.2.zip](https://github.com/xitrum-framework/scalive/releases/download/v1.2/scalive-1.2.zip),
 you will see:
 
 ```
@@ -94,7 +94,7 @@ For simplicity and to avoid memory leak when you attach/detach many times,
 Scalive only supports processes with only the default system class loader,
 without additional class loaders (Ex: normal standalone JVM processes, like
 [Play](http://www.playframework.com/) or
-[Xitrum](http://ngocdaothanh.github.io/xitrum/) in production mode).
+[Xitrum](http://xitrum-framework.github.io/xitrum/) in production mode).
 
 Processes with multiple class loaders like Tomcat or
 [SBT](http://www.scala-sbt.org/) are not supported (with SBT, you already has
@@ -104,5 +104,5 @@ the SBT console, so it's not a big deal).
 
 These features will be added in the future:
 
-* [Use up/down arrows keys to navigate the console history, pasting multiline block of code etc.](https://github.com/ngocdaothanh/scalive/issues/1)
-* [Use tab key for autocompletion](https://github.com/ngocdaothanh/scalive/issues/2)
+* [Use up/down arrows keys to navigate the console history, pasting multiline block of code etc.](https://github.com/xitrum-framework/scalive/issues/1)
+* [Use tab key for autocompletion](https://github.com/xitrum-framework/scalive/issues/2)
