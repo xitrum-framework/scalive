@@ -6,14 +6,14 @@ JVM processes without any prior setup at the target process.
 ## Download
 
 Download and extract
-[scalive-1.2.zip](https://github.com/xitrum-framework/scalive/releases/download/v1.2/scalive-1.2.zip),
+[scalive-1.3.zip](https://github.com/xitrum-framework/scalive/releases/download/v1.3/scalive-1.3.zip),
 you will see:
 
 ```
-scalive-1.2/
+scalive-1.3/
   scalive
   scalive.cmd
-  scalive-1.2.jar
+  scalive-1.3.jar
 
   scala-library-2.10.4.jar
   scala-compiler-2.10.4.jar
