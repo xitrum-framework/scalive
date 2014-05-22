@@ -15,23 +15,19 @@ scalive-1.2/
   scalive.cmd
   scalive-1.2.jar
 
-  scala-library-2.10.3.jar
-  scala-compiler-2.10.3.jar
-  scala-reflect-2.10.3.jar
-
   scala-library-2.10.4.jar
   scala-compiler-2.10.4.jar
   scala-reflect-2.10.4.jar
 
-  scala-library-2.11.0.jar
-  scala-compiler-2.11.0.jar
-  scala-reflect-2.11.0.jar
+  scala-library-2.11.1.jar
+  scala-compiler-2.11.1.jar
+  scala-reflect-2.11.1.jar
 ```
 
 scala-library, scala-compiler, and scala-reflect of the appropriate version
 will be loaded to your running JVM process, if they have not been loaded.
 
-For convenience, Scala 2.10.3, 2.10.4, and 2.11.0 JARs are preincluded. If your
+For convenience, Scala 2.10.4 and 2.11.1 JARs are preincluded. If your
 process is using a different Scala version, you need to manually download the
 corresponding JARs and save them as above.
 
