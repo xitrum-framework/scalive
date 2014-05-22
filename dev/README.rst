@@ -27,17 +27,13 @@ This is the directory that will be zipped when Scalive is released.
     scalive.cmd
     scalive_2.11-1.2-SNAPSHOT.jar -> ../../target/scala-2.11/scalive_2.11-1.2-SNAPSHOT.jar
 
-    scala-library-2.10.3.jar
-    scala-compiler-2.10.3.jar
-    scala-reflect-2.10.3.jar
-
     scala-library-2.10.4.jar
     scala-compiler-2.10.4.jar
     scala-reflect-2.10.4.jar
 
-    scala-library-2.11.0.jar
-    scala-compiler-2.11.0.jar
-    scala-reflect-2.11.0.jar
+    scala-library-2.11.1.jar
+    scala-compiler-2.11.1.jar
+    scala-reflect-2.11.1.jar
 
 While developing:
 
@@ -58,13 +54,13 @@ released (remember to remove uneccessary files, like .gitignore):
     scalive.cmd
     scalive-<version>.jar  <-- Doesn't depend on Scala, thus doesn't follow Scala JAR naming
 
-    scala-library-2.10.3.jar
-    scala-compiler-2.10.3.jar
-    scala-reflect-2.10.3.jar
-
     scala-library-2.10.4.jar
     scala-compiler-2.10.4.jar
     scala-reflect-2.10.4.jar
+
+    scala-library-2.11.1.jar
+    scala-compiler-2.11.1.jar
+    scala-reflect-2.11.1.jar
 
 Then zip it:
 
