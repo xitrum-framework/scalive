@@ -90,7 +90,7 @@ For simplicity and to avoid memory leak when you attach/detach many times,
 Scalive only supports processes with only the default system class loader,
 without additional class loaders (Ex: normal standalone JVM processes, like
 [Play](http://www.playframework.com/) or
-[Xitrum](http://xitrum-framework.github.io/xitrum/) in production mode).
+[Xitrum](http://xitrum-framework.github.io/) in production mode).
 
 Processes with multiple class loaders like Tomcat or
 [SBT](http://www.scala-sbt.org/) are not supported (with SBT, you already has
