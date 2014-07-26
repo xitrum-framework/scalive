@@ -9,7 +9,7 @@ import java.net.URLClassLoader;
 
 public class Server {
     // Load this Scala version if Scala has not been loaded in the target process
-    private static final String DEFAULT_SCALA_VERSION = "2.11.1";
+    private static final String DEFAULT_SCALA_VERSION = "2.11.2";
 
     public static void serve(Socket client, String[] jarpaths) throws Exception {
         InputStream  in  = client.getInputStream();

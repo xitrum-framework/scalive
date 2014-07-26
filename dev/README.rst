@@ -31,9 +31,9 @@ This is the directory that will be zipped when Scalive is released.
     scala-compiler-2.10.4.jar
     scala-reflect-2.10.4.jar
 
-    scala-library-2.11.1.jar
-    scala-compiler-2.11.1.jar
-    scala-reflect-2.11.1.jar
+    scala-library-2.11.2.jar
+    scala-compiler-2.11.2.jar
+    scala-reflect-2.11.2.jar
 
 While developing:
 
@@ -58,9 +58,9 @@ released (remember to remove uneccessary files, like .gitignore):
     scala-compiler-2.10.4.jar
     scala-reflect-2.10.4.jar
 
-    scala-library-2.11.1.jar
-    scala-compiler-2.11.1.jar
-    scala-reflect-2.11.1.jar
+    scala-library-2.11.2.jar
+    scala-compiler-2.11.2.jar
+    scala-reflect-2.11.2.jar
 
 Then zip it:
 
