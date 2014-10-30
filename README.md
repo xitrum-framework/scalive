@@ -26,10 +26,18 @@ scalive-1.4/
 
 scala-library, scala-compiler, and scala-reflect of the appropriate version
 will be loaded to your running JVM process, if they have not been loaded.
+The REPL console needs these libraries.
+
+For example, your process has already loaded scala-library 2.10.4 by itself,
+but scala-compiler and scala-reflect haven't been loaded, Scalive will
+automatically load their version 2.10.4.
+
+If none of them has been loaded, Scalive will load version 2.11.2.
 
 For convenience, Scala 2.10.4 and 2.11.2 JARs are preincluded. If your
 process is using a different Scala version, you need to manually download the
-corresponding JARs and save them as above.
+corresponding JARs from the Internet and save them in the same directory as
+above.
 
 ## Usage
 
