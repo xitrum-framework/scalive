@@ -8,6 +8,9 @@ scalaVersion := "2.11.2"
 
 autoScalaLibrary := false
 
+// Do not append Scala versions to the generated artifacts
+crossPaths := false
+
 javacOptions ++= Seq("-Xlint:deprecation")
 
 // Ensure Scalive can run on Java 6

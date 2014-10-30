@@ -25,7 +25,7 @@ This is the directory that will be zipped when Scalive is released.
   zip/
     scalive
     scalive.cmd
-    scalive_2.11-1.4-SNAPSHOT.jar -> ../../target/scala-2.11/scalive_2.11-1.4-SNAPSHOT.jar
+    scalive-<version>-SNAPSHOT.jar -> ../../target/scala-2.11/scalive-<version>-SNAPSHOT.jar
 
     scala-library-2.10.4.jar
     scala-compiler-2.10.4.jar
