@@ -6,7 +6,7 @@ JVM processes without any prior setup at the target process.
 ## Download
 
 Download and extract
-[scalive-1.4.zip](https://github.com/xitrum-framework/scalive/releases/download/v1.4/scalive-1.4.zip),
+[scalive-1.4.zip](https://github.com/xitrum-framework/scalive/releases/download/1.4/scalive-1.4.zip),
 you will see:
 
 ```
