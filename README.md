@@ -6,22 +6,22 @@ JVM processes without any prior setup at the target process.
 ## Download
 
 Download and extract
-[scalive-1.4.zip](https://github.com/xitrum-framework/scalive/releases/download/1.4/scalive-1.4.zip),
+[scalive-1.5.zip](https://github.com/xitrum-framework/scalive/releases/download/1.5/scalive-1.5.zip),
 you will see:
 
 ```
-scalive-1.4/
+scalive-1.5/
   scalive
   scalive.cmd
-  scalive-1.4.jar
+  scalive-1.5.jar
 
   scala-library-2.10.4.jar
   scala-compiler-2.10.4.jar
   scala-reflect-2.10.4.jar
 
-  scala-library-2.11.2.jar
-  scala-compiler-2.11.2.jar
-  scala-reflect-2.11.2.jar
+  scala-library-2.11.4.jar
+  scala-compiler-2.11.4.jar
+  scala-reflect-2.11.4.jar
 ```
 
 scala-library, scala-compiler, and scala-reflect of the appropriate version
@@ -32,9 +32,9 @@ For example, your process has already loaded scala-library 2.10.4 by itself,
 but scala-compiler and scala-reflect haven't been loaded, Scalive will
 automatically load their version 2.10.4.
 
-If none of them has been loaded, Scalive will load version 2.11.2.
+If none of them has been loaded, Scalive will load version 2.11.4.
 
-For convenience, Scala 2.10.4 and 2.11.2 JARs are preincluded. If your
+For convenience, Scala 2.10.4 and 2.11.4 JARs are preincluded. If your
 process is using a different Scala version, you need to manually download the
 corresponding JARs from the Internet and save them in the same directory as
 above.
