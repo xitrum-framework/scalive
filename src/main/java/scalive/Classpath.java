@@ -24,24 +24,35 @@ public class Classpath {
     //--------------------------------------------------------------------------
 
     /**
-     * @param jarpaths Directories to search for the JAR
+     * Finds the ".jar" file with the {@code jarPrefix} and the latest version.
      *
-     * @param jarbase JAR file name prefix; Ex: "scalive-agent" will match "scalive-agent-xxx.jar"
+     * @param jarSearchDirs Directories to search for the JAR
+     *
+     * @param jarPrefix JAR file name prefix to search; example: "scalive-agent" will match "scalive-agent-xxx.jar"
      */
-    public static String findJar(String[] jarpaths, String jarbase) throws Exception {
-        for (String jarpath: jarpaths) {
-            File   dir   = new File(jarpath);
+    public static String findJar(String[] jarSearchDirs, String jarPrefix) throws Exception {
+        String maxBaseName = null;
+        File   maxFile     = null;
+        for (String jarSearchDir: jarSearchDirs) {
+            File dir     = new File(jarSearchDir);
             File[] files = dir.listFiles();
+            if (files == null) continue;
 
-            for (int i = 0; i < files.length; i++) {
-                File   file = files[i];
-                String name = file.getName();
-                if (file.isFile() && name.endsWith(".jar") && name.startsWith(jarbase))
-                    return file.getPath();
+            for (File file : files) {
+                String baseName = file.getName();
+                if (file.isFile() && baseName.endsWith(".jar") && baseName.startsWith(jarPrefix)) {
+                    if (maxBaseName == null || baseName.compareTo(maxBaseName) > 0) {
+                        maxBaseName = baseName;
+                        maxFile     = file;
+                    }
+                }
             }
         }
 
-        throw new Exception("Could not find " + jarbase + " in " + join(jarpaths, File.pathSeparator));
+        if (maxFile == null)
+            throw new Exception("Could not find " + jarPrefix + " in " + join(jarSearchDirs, File.pathSeparator));
+        else
+            return maxFile.getPath();
     }
 
     public static void addPath(URLClassLoader cl, String path) throws Exception {
@@ -50,24 +61,24 @@ public class Classpath {
         if (!Arrays.asList(urls).contains(url)) addURL.invoke(cl, url);
     }
 
-    /** Combination of findJar and addPath. */
-    public static void findAndAddJar(URLClassLoader cl, String[] jarpaths, String jarbase) throws Exception {
-        String jar = findJar(jarpaths, jarbase);
+    /** Combination of {@link #findJar(String[], String)} and {@link #addPath(URLClassLoader, String)}. */
+    public static void findAndAddJar(URLClassLoader cl, String[] jarSearchDirs, String jarPrefix) throws Exception {
+        String jar = findJar(jarSearchDirs, jarPrefix);
         addPath(cl, jar);
+        System.out.println("[Scalive] Load " + jar);
     }
 
     /**
-     * Similar to findAndAddJar without representativeClass, but only find and
-     * add the JAR to classpath if the representativeClass has not been loaded.
+     * Similar to {@link #findAndAddJar(URLClassLoader, String[], String)} without {@code representativeClass},
+     * but only find and add the JAR to classpath if the representativeClass has not been loaded.
      */
     public static void findAndAddJar(
-        URLClassLoader cl, String[] jarpaths, String jarbase, String representativeClass
+        URLClassLoader cl, String representativeClass, String[] jarSearchDirs, String jarPrefix
     ) throws Exception {
         try {
             Class.forName(representativeClass, true, cl);
         } catch (ClassNotFoundException e) {
-            System.out.println("[Scalive] Load " + jarbase);
-            findAndAddJar(cl, jarpaths, jarbase);
+            findAndAddJar(cl, jarSearchDirs, jarPrefix);
         }
     }
 
@@ -86,11 +97,11 @@ public class Classpath {
     //--------------------------------------------------------------------------
 
     private static String join(Object[] xs, String separator) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         for (Object x: xs) {
-            if (buf.length() > 0) buf.append(separator);
-            buf.append(x);
+            if (b.length() > 0) b.append(separator);
+            b.append(x);
         }
-        return buf.toString();
+        return b.toString();
     }
 }

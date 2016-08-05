@@ -6,44 +6,46 @@ JVM processes without any prior setup at the target process.
 ## Download
 
 Download and extract
-[scalive-1.5.zip](https://github.com/xitrum-framework/scalive/releases/download/1.5/scalive-1.5.zip),
+[scalive-1.6.zip](https://github.com/xitrum-framework/scalive/releases/download/1.6/scalive-1.6.zip),
 you will see:
 
 ```
-scalive-1.5/
+scalive-1.6/
   scalive
   scalive.cmd
-  scalive-1.5.jar
+  scalive-1.6.jar
 
-  scala-library-2.10.4.jar
-  scala-compiler-2.10.4.jar
-  scala-reflect-2.10.4.jar
+  scala-library-2.10.6.jar
+  scala-compiler-2.10.6.jar
+  scala-reflect-2.10.6.jar
 
-  scala-library-2.11.4.jar
-  scala-compiler-2.11.4.jar
-  scala-reflect-2.11.4.jar
+  scala-library-2.11.8.jar
+  scala-compiler-2.11.8.jar
+  scala-reflect-2.11.8.jar
 ```
 
-scala-library, scala-compiler, and scala-reflect of the appropriate version
-will be loaded to your running JVM process, if they have not been loaded.
-The REPL console needs these libraries.
+scala-library, scala-compiler, and scala-reflect of the correct version
+that your JVM process is using will be loaded, if they have not been loaded.
+The REPL console needs these libraries to work.
 
-For example, your process has already loaded scala-library 2.10.4 by itself,
+For example, your process has already loaded scala-library 2.11.8 by itself,
 but scala-compiler and scala-reflect haven't been loaded, Scalive will
-automatically load their version 2.10.4.
+automatically load their version 2.11.8.
 
-If none of them has been loaded, Scalive will load version 2.11.4.
+If none of them has been loaded, i.e. your process doesn't use Scala,
+Scalive will load the lastest version in the directory.
 
-For convenience, Scala 2.10.4 and 2.11.4 JARs are preincluded. If your
-process is using a different Scala version, you need to manually download the
-corresponding JARs from the Internet and save them in the same directory as
-above.
+For your convenience, Scala 2.10.6 and 2.11.8 JARs are included above.
+
+If your process is using a different Scala version, you need to manually
+download the corresponding JARs from the Internet and save them in the
+same directory as above.
 
 ## Usage
 
 Run the shell script `scalive` (*nix) or `scalive.cmd` (Windows).
 
-To see a list of running JVM processes and their process IDs:
+Run without argument to see the list of running JVM process IDs on your local machine:
 
 ```
 scalive
@@ -52,25 +54,26 @@ scalive
 To connect a Scala REPL console to a process:
 
 ```
-scalive <pid>
+scalive <process id listed above>
 ```
 
-## How to add your own JARs
+## How to load your own JARs to the process
 
-Scalive only automatically adds `scala-library.jar`, `scala-compiler.jar`,
-`scala-reflect.jar`, and `scalive.jar` to the system classpath. If you want to
-load additional classes in other JARs, first run these in the REPL console to
-add the JAR to the system class loader:
+Scalive only automatically loads `scala-library.jar`, `scala-compiler.jar`,
+`scala-reflect.jar`, and `scalive.jar` to the system classpath.
+
+If you want to load additional classes in other JARs, first run these in the
+REPL console to load the JAR to the system class loader:
 
 ```
-val cl         = ClassLoader.getSystemClassLoader.asInstanceOf[java.net.URLClassLoader]
-val searchDirs = Array("/dir/containing/the/jar")
-val jarbase    = "mylib"  // Will match "mylibxxx.jar", convenient when there's version number in the file name
-scalive.Classpath.findAndAddJar(cl, searchDirs, jarbase)
+val cl            = ClassLoader.getSystemClassLoader.asInstanceOf[java.net.URLClassLoader]
+val jarSearchDirs = Array("/dir/containing/the/jar")
+val jarPrefix     = "mylib"  // Will match "mylib-xxx.jar", convenient when there's version number in the file name
+scalive.Classpath.findAndAddJar(cl, jarSearchDirs, jarPrefix)
 ```
 
 Now the trick is just quit the REPL console and connect it to the target process
-again. You will be able to use your classes in the JAR as normal:
+again. You will be able to use your classes in the JAR normally:
 
 ```
 import mylib.foo.Bar
@@ -81,7 +84,7 @@ import mylib.foo.Bar
 
 ## How Scalive works
 
-Scalive uses the [Attach API](https://blogs.oracle.com/CoreJavaTechTips/entry/the_attach_api)
+Scalive uses the [Attach API](https://blogs.oracle.com/CoreJavaTechTips/entry/the_attach_api) in Java 6
 to tell the target process to load an [agent](http://javahowto.blogspot.jp/2006/07/javaagent-option.html).
 
 The agent then creates a TCP server to let the Scalive process interact with the
@@ -96,13 +99,12 @@ console for Clojure.
 
 For simplicity and to avoid memory leak when you attach/detach many times,
 Scalive only supports processes with only the default system class loader,
-without additional class loaders (Ex: normal standalone JVM processes, like
+without additional class loaders. Usually they are standalone JVM processes,
+like
 [Play](http://www.playframework.com/) or
-[Xitrum](http://xitrum-framework.github.io/) in production mode).
+[Xitrum](http://xitrum-framework.github.io/) in production mode.
 
-Processes with multiple class loaders like Tomcat or
-[SBT](http://www.scala-sbt.org/) are not supported (with SBT, you already has
-the SBT console, so it's not a big deal).
+Processes with multiple class loaders like Tomcat are currently not supported.
 
 2.
 

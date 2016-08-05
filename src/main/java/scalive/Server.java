@@ -8,10 +8,7 @@ import java.net.Socket;
 import java.net.URLClassLoader;
 
 public class Server {
-    // Load this Scala version if Scala has not been loaded in the target process
-    private static final String DEFAULT_SCALA_VERSION = "2.11.4";
-
-    public static void serve(Socket client, String[] jarpaths) throws Exception {
+    public static void serve(Socket client, String[] jarSearchDirs) throws Exception {
         InputStream  in  = client.getInputStream();
         OutputStream out = client.getOutputStream();
 
@@ -25,7 +22,7 @@ public class Server {
 
         try {
             URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            addJarsToURLClassLoader(cl, jarpaths);
+            loadDependencyJars(cl, jarSearchDirs);
 
             String   classpath = Classpath.getClasspath(cl);
             Class<?> repl      = Class.forName("scalive.Repl");
@@ -40,16 +37,16 @@ public class Server {
         }
     }
 
-    private static void addJarsToURLClassLoader(URLClassLoader cl, String[] jarpaths) throws Exception {
+    private static void loadDependencyJars(URLClassLoader cl, String[] jarSearchDirs) throws Exception {
         // Try scala-library first
-        Classpath.findAndAddJar(cl, jarpaths, "scala-library-" + DEFAULT_SCALA_VERSION, "scala.AnyVal");
+        Classpath.findAndAddJar(cl, "scala.AnyVal", jarSearchDirs, "scala-library");
 
         // So that we can get the actual Scala version being used
         String version = Classpath.getScalaVersion(cl);
 
-        Classpath.findAndAddJar(cl, jarpaths, "scala-reflect-"  + version, "scala.reflect.runtime.JavaUniverse");
-        Classpath.findAndAddJar(cl, jarpaths, "scala-compiler-" + version, "scala.tools.nsc.interpreter.ILoop");
+        Classpath.findAndAddJar(cl, "scala.reflect.runtime.JavaUniverse", jarSearchDirs, "scala-reflect-"  + version);
+        Classpath.findAndAddJar(cl, "scala.tools.nsc.interpreter.ILoop",  jarSearchDirs, "scala-compiler-" + version);
 
-        Classpath.findAndAddJar(cl, jarpaths, "scalive", "scalive.Repl");
+        Classpath.findAndAddJar(cl, "scalive.Repl", jarSearchDirs, "scalive");
     }
 }

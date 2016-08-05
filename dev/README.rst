@@ -25,21 +25,21 @@ This is the directory that will be zipped when Scalive is released.
   zip/
     scalive
     scalive.cmd
-    scalive-<version>-SNAPSHOT.jar -> ../../target/scala-2.11/scalive-<version>-SNAPSHOT.jar
+    scalive-<version>.jar -> ../../target/scala-2.11/scalive-<version>.jar
 
-    scala-library-2.10.4.jar
-    scala-compiler-2.10.4.jar
-    scala-reflect-2.10.4.jar
+    scala-library-2.10.6.jar
+    scala-compiler-2.10..jar
+    scala-reflect-2.10.6.jar
 
-    scala-library-2.11.4.jar
-    scala-compiler-2.11.4.jar
-    scala-reflect-2.11.4.jar
+    scala-library-2.11.8.jar
+    scala-compiler-2.11.8.jar
+    scala-reflect-2.11.8.jar
 
 While developing:
 
-* Run ``sbt package`` to create/update scalive.jar.
+* Run ``sbt package`` to create/update scalive-<version>.jar.
 * Add missing JARs as above.
-* Run ``scalive`` to attach to a certain JVM process to see if it works properly.
+* Run ``scalive`` to attach to a JVM process to see if it works properly.
 
 Release
 -------

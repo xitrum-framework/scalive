@@ -7,12 +7,10 @@ import java.net.Socket;
 
 public class Agent {
     /**
-     * @param agentArgs <jarpath1>[<File.pathSeparator><jarpath2>...] <server port>
+     * @param agentArgs <jarSearchDir1>[<File.pathSeparator><jarSearchDir2>...] <server port>
      *
-     * jarpath is the absolute path this directory:
-     *
-     * {{{
-     * jarpath/
+     * <pre>{@code
+     * jarSearchDir/
      *   scalive.jar
      *
      *   scala-library-2.11.0.jar
@@ -20,12 +18,12 @@ public class Agent {
      *   scala-reflect-2.11.0.jar
      *
      *   [Other Scala versions]
-     * }}}
+     * }</pre>
      */
     public static void agentmain(String agentArgs, Instrumentation inst) throws Exception {
-        final String[] args     = agentArgs.split(" ");
-        final String[] jarpaths = args[0].split(File.pathSeparator);
-        final int      port     = Integer.parseInt(args[1]);
+        final String[] args          = agentArgs.split(" ");
+        final String[] jarSearchDirs = args[0].split(File.pathSeparator);
+        final int      port          = Integer.parseInt(args[1]);
 
         System.out.println("[Scalive] REPL server starts at port " + port);
         final ServerSocket server = new ServerSocket(port);
@@ -42,7 +40,7 @@ public class Agent {
                 try {
                     Socket client = server.accept();  // Block until a connection comes in
                     server.close();                   // Accept no other clients
-                    Server.serve(client, jarpaths);
+                    Server.serve(client, jarSearchDirs);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

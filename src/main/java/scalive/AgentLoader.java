@@ -10,12 +10,10 @@ import java.util.Iterator;
 
 public class AgentLoader {
     /**
-     * @param args <jarpath1>[<File.pathSeparator><jarpath2>...] [pid]
+     * @param args <jarSearchDir1>[<File.pathSeparator><jarSearchDir2>...] [pid]
      *
-     * jarpath is the absolute path this directory:
-     *
-     * {{{
-     * jarpath/
+     * <pre>{@code
+     * jarSearchDir/
      *   scalive.jar
      *
      *   scala-library-2.11.0.jar
@@ -23,11 +21,11 @@ public class AgentLoader {
      *   scala-reflect-2.11.0.jar
      *
      *   [Other Scala versions]
-     * }}}
+     * }</pre>
      */
     public static void main(String[] args) throws Exception {
         if (args.length != 1 && args.length != 2) {
-            System.out.println("Arguments: <jarpath1>[<File.pathSeparator><jarpath2>...] [pid]");
+            System.out.println("Arguments: <jarSearchDir1>[<File.pathSeparator><jarSearchDir2>...] [pid]");
             return;
         }
 
@@ -38,16 +36,16 @@ public class AgentLoader {
             return;
         }
 
-        String jarpaths = args[0];
+        String jarSearchDirs = args[0];
         String pid      = args[1];
-        loadAgent(jarpaths, pid);
+        loadAgent(jarSearchDirs, pid);
     }
 
     /**
      * com.sun.tools.attach.VirtualMachine is in tools.jar, which is not in
      * classpath by default:
      *
-     * {{{
+     * <pre>{@code
      * jdk/
      *   bin/
      *     java
@@ -56,7 +54,7 @@ public class AgentLoader {
      *     java
      *   lib/
      *     tools.jar
-     * }}}
+     * }</pre>
      */
     private static void addToolsDotJarToClasspath() throws Exception {
         String path = System.getProperty("java.home") + "/../lib/tools.jar";
@@ -74,13 +72,13 @@ public class AgentLoader {
         }
     }
 
-    private static void loadAgent(String jarpaths, String pid) throws Exception {
-        final String[]       ary      = jarpaths.split(File.pathSeparator);
+    private static void loadAgent(String jarSearchDirs, String pid) throws Exception {
+        final String[]       ary      = jarSearchDirs.split(File.pathSeparator);
         final String         agentJar = Classpath.findJar(ary, "scalive");
         final VirtualMachine vm       = VirtualMachine.attach(pid);
         final int            port     = Client.getFreePort();
 
-        vm.loadAgent(agentJar, jarpaths + " " + port);
+        vm.loadAgent(agentJar, jarSearchDirs + " " + port);
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override public void run() {
                 try {
