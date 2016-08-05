@@ -14,6 +14,7 @@ scalive-1.6/
   scalive
   scalive.cmd
   scalive-1.6.jar
+  jline-2.14.2.jar
 
   scala-library-2.10.6.jar
   scala-compiler-2.10.6.jar
