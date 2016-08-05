@@ -6,7 +6,6 @@ import com.sun.tools.attach.VirtualMachineDescriptor;
 
 import java.io.File;
 import java.net.URLClassLoader;
-import java.util.Iterator;
 
 public class AgentLoader {
     /**
@@ -65,9 +64,7 @@ public class AgentLoader {
         System.out.println("JVM processes:");
         System.out.println("#pid\tDisplay name");
 
-        Iterator<VirtualMachineDescriptor> it = VirtualMachine.list().iterator();
-        while (it.hasNext()) {
-            VirtualMachineDescriptor vmd = it.next();
+        for (VirtualMachineDescriptor vmd : VirtualMachine.list()) {
             System.out.println(vmd.id() + "\t" + vmd.displayName());
         }
     }
@@ -89,6 +86,6 @@ public class AgentLoader {
             }
         });
 
-        Client.connectToRepl(port);
+        Client.connectToReplServer(port);
     }
 }

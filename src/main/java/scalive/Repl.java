@@ -1,20 +1,19 @@
 package scalive;
 
+import scala.Console;
+import scala.Option;
+import scala.runtime.AbstractFunction0;
+import scala.tools.nsc.Settings;
+import scala.tools.nsc.interpreter.ILoop;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import scala.Console;
-import scala.Function0;
-import scala.Option;
-import scala.runtime.AbstractFunction0;
-import scala.tools.nsc.interpreter.ILoop;
-import scala.tools.nsc.Settings;
-
 public class Repl {
-    public static void run(ClassLoader cl, String classpath, final InputStream in, final OutputStream out) {
+    public static void run(ClassLoader cl, String classpath, InputStream in, OutputStream out) {
         // Without the below settings, there will be error:
         // Failed to initialize compiler: object scala.runtime in compiler mirror not found.
         // ** Note that as of 2.8 scala does not assume use of the java classpath.
@@ -41,8 +40,17 @@ public class Repl {
             new PrintWriter(out)
         );
 
-        // https://github.com/xitrum-framework/scalive/issues/11
-        // http://stackoverflow.com/questions/25623779/implementing-a-scala-function-in-java
+        overrideScalaConsole(in, out, new Runnable() {
+            @Override
+            public void run() {
+                repl.process(settings);
+            }
+        });
+    }
+
+    // https://github.com/xitrum-framework/scalive/issues/11
+    // http://stackoverflow.com/questions/25623779/implementing-a-scala-function-in-java
+    private static void overrideScalaConsole(final InputStream in, final OutputStream out, final Runnable runnable) {
         Console.withIn(in, new AbstractFunction0<Object>() {
             @Override
             public Object apply() {
@@ -53,7 +61,7 @@ public class Repl {
                             @Override
                             public Object apply() {
                                 // This call does not return until the stream (connection) is closed
-                                repl.process(settings);
+                                runnable.run();
                                 return null;
                             }
                         });

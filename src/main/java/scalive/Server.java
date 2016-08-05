@@ -7,11 +7,11 @@ import java.net.Socket;
 import java.net.URLClassLoader;
 
 public class Server {
-    public static void serve(Socket client, String[] jarSearchDirs) throws Exception {
+    public static void serve(Socket socket, String[] jarSearchDirs) throws Exception {
         // Create a REPL console and wire IO streams of the socket to it
 
-        InputStream  in  = client.getInputStream();
-        OutputStream out = client.getOutputStream();
+        InputStream  in  = socket.getInputStream();
+        OutputStream out = socket.getOutputStream();
 
         InputStream oldIn  = System.in;
         PrintStream oldOut = System.out;
@@ -32,7 +32,7 @@ public class Server {
             System.setOut(oldOut);
             System.setErr(oldErr);
             System.out.println("[Scalive] REPL closed");
-            client.close();
+            socket.close();
         }
     }
 
