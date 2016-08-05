@@ -88,11 +88,14 @@ import mylib.foo.Bar
 Scalive uses the [Attach API](https://blogs.oracle.com/CoreJavaTechTips/entry/the_attach_api) in Java 6
 to tell the target process to load an [agent](http://javahowto.blogspot.jp/2006/07/javaagent-option.html).
 
-The agent then creates a TCP server to let the Scalive process interact with the
-target process. The Scalive process acts as a client.
+The agent then creates a REPL interpreter and a TCP server to let the
+Scalive process interact with the interpreter remotely. The Scalive
+process acts as a client.
 
-See also [liverepl](https://github.com/djpowell/liverepl), a similar REPL
-console for Clojure.
+Similar projects:
+
+* [liverepl](https://github.com/djpowell/liverepl)
+* [scala-web-repl](https://github.com/woshilaiceshide/scala-web-repl)
 
 ## Known issues
 
