@@ -3,12 +3,13 @@ package scalive;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Method;
 import java.net.Socket;
 import java.net.URLClassLoader;
 
 public class Server {
     public static void serve(Socket client, String[] jarSearchDirs) throws Exception {
+        // Create a REPL console and wire IO streams of the socket to it
+
         InputStream  in  = client.getInputStream();
         OutputStream out = client.getOutputStream();
 
@@ -24,10 +25,8 @@ public class Server {
             URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
             loadDependencyJars(cl, jarSearchDirs);
 
-            String   classpath = Classpath.getClasspath(cl);
-            Class<?> repl      = Class.forName("scalive.Repl");
-            Method   method    = repl.getMethod("run", ClassLoader.class, String.class, InputStream.class, OutputStream.class);
-            method.invoke(null, cl, classpath, in, out);
+            String classpath = Classpath.getClasspath(cl);
+            Repl.run(cl, classpath, in, out);
         } finally {
             System.setIn(oldIn);
             System.setOut(oldOut);
