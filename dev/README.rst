@@ -25,7 +25,8 @@ This is the directory that will be zipped when Scalive is released.
   zip/
     scalive
     scalive.cmd
-    scalive-<version>.jar -> ../../target/scala-2.11/scalive-<version>.jar
+    scalive-<version>.jar <- ../../target/scala-2.11/scalive-<version>.jar
+    jline-2.14.2.jar      <- Download and put JLine JAR here
 
     scala-library-2.10.6.jar
     scala-compiler-2.10..jar
@@ -52,7 +53,7 @@ released (remember to remove uneccessary files, like .gitignore):
   scalive-<version>/
     scalive
     scalive.cmd
-    scalive-<version>.jar  <-- Doesn't depend on Scala, thus doesn't follow Scala JAR naming
+    scalive-<version>.jar  <- Doesn't depend on Scala, thus doesn't follow Scala JAR naming
 
     scala-library-2.10.4.jar
     scala-compiler-2.10.4.jar
