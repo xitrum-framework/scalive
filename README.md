@@ -58,6 +58,11 @@ To connect a Scala REPL console to a process:
 scalive <process id listed above>
 ```
 
+Just like in normal Scala REPL console, you can:
+
+* Use up/down arrows keys to navigate the console history
+* Use tab key for completion
+
 ## How to load your own JARs to the process
 
 Scalive only automatically loads `scala-library.jar`, `scala-compiler.jar`,
@@ -100,8 +105,6 @@ Similar projects:
 
 ## Known issues
 
-1.
-
 For simplicity and to avoid memory leak when you attach/detach many times,
 Scalive only supports processes with only the default system class loader,
 without additional class loaders. Usually they are standalone JVM processes,
@@ -110,10 +113,3 @@ like
 [Xitrum](http://xitrum-framework.github.io/) in production mode.
 
 Processes with multiple class loaders like Tomcat are currently not supported.
-
-2.
-
-These features will be added in the future:
-
-* [Use up/down arrows keys to navigate the console history, pasting multiline block of code etc.](https://github.com/xitrum-framework/scalive/issues/1)
-* [Use tab key for autocompletion](https://github.com/xitrum-framework/scalive/issues/2)
