@@ -1,13 +1,15 @@
 package scalive;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 
 public class Classpath {
-    private static Method addURL = getAddURL();
+    private static final Method addURL = getAddURL();
 
     // http://stackoverflow.com/questions/8222976/why-urlclassloader-addurl-protected-in-java
     private static Method getAddURL() {
@@ -15,9 +17,8 @@ public class Classpath {
             Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
             method.setAccessible(true);
             return method;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -30,7 +31,7 @@ public class Classpath {
      *
      * @param jarPrefix JAR file name prefix to search; example: "scalive-agent" will match "scalive-agent-xxx.jar"
      */
-    public static String findJar(String[] jarSearchDirs, String jarPrefix) throws Exception {
+    public static String findJar(String[] jarSearchDirs, String jarPrefix) throws IllegalStateException {
         String maxBaseName = null;
         File   maxFile     = null;
         for (String jarSearchDir: jarSearchDirs) {
@@ -50,22 +51,26 @@ public class Classpath {
         }
 
         if (maxFile == null)
-            throw new Exception("Could not find " + jarPrefix + " in " + join(jarSearchDirs, File.pathSeparator));
+            throw new IllegalStateException("Could not find " + jarPrefix + " in " + join(jarSearchDirs, File.pathSeparator));
         else
             return maxFile.getPath();
     }
 
-    public static void addPath(URLClassLoader cl, String path) throws Exception {
+    public static void addPath(
+            URLClassLoader cl, String path
+    ) throws MalformedURLException, InvocationTargetException, IllegalAccessException {
         URL   url  = new File(path).toURI().toURL();
         URL[] urls = cl.getURLs();
         if (!Arrays.asList(urls).contains(url)) addURL.invoke(cl, url);
     }
 
     /** Combination of {@link #findJar(String[], String)} and {@link #addPath(URLClassLoader, String)}. */
-    public static void findAndAddJar(URLClassLoader cl, String[] jarSearchDirs, String jarPrefix) throws Exception {
+    public static void findAndAddJar(
+            URLClassLoader cl, String[] jarSearchDirs, String jarPrefix
+    ) throws IllegalAccessException, InvocationTargetException, MalformedURLException {
         String jar = findJar(jarSearchDirs, jarPrefix);
         addPath(cl, jar);
-        System.out.println("[Scalive] Load " + jar);
+        Log.log("Load " + jar);
     }
 
     /**
@@ -74,7 +79,7 @@ public class Classpath {
      */
     public static void findAndAddJar(
         URLClassLoader cl, String representativeClass, String[] jarSearchDirs, String jarPrefix
-    ) throws Exception {
+    ) throws IllegalAccessException, MalformedURLException, InvocationTargetException {
         try {
             Class.forName(representativeClass, true, cl);
         } catch (ClassNotFoundException e) {
@@ -88,7 +93,9 @@ public class Classpath {
         return join(urls, File.pathSeparator);
     }
 
-    public static String getScalaVersion(ClassLoader cl) throws Exception {
+    public static String getScalaVersion(
+            ClassLoader cl
+    ) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class<?> k = Class.forName("scala.util.Properties", true, cl);
         Method   m = k.getDeclaredMethod("versionNumberString");
         return (String) m.invoke(k);

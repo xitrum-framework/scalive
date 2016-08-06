@@ -20,6 +20,6 @@ libraryDependencies += "jline"          % "jline"          % "2.14.2"
 unmanagedJars in Compile := (file(System.getProperty("java.home")) / ".." / "lib" * "tools.jar").classpath
 
 packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
-  "Main-Class"  -> "scalive.AgentLoader",
-  "Agent-Class" -> "scalive.Agent"
+  "Main-Class"  -> "scalive.client.AgentLoader",
+  "Agent-Class" -> "scalive.server.Agent"
 )

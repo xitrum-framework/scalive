@@ -1,10 +1,15 @@
-package scalive;
+package scalive.client;
 
 // http://docs.oracle.com/javase/6/docs/jdk/api/attach/spec/index.html
 import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
 
+import scalive.Classpath;
+import scalive.Log;
+import scalive.Net;
+
 import java.io.File;
+import java.io.IOException;
 import java.net.URLClassLoader;
 
 public class AgentLoader {
@@ -14,6 +19,7 @@ public class AgentLoader {
      * <pre>{@code
      * jarSearchDir/
      *   scalive.jar
+     *   jline-2.14.2.jar
      *
      *   scala-library-2.11.0.jar
      *   scala-compiler-2.11.0.jar
@@ -24,7 +30,7 @@ public class AgentLoader {
      */
     public static void main(String[] args) throws Exception {
         if (args.length != 1 && args.length != 2) {
-            System.out.println("Arguments: <jarSearchDir1>[<File.pathSeparator><jarSearchDir2>...] [pid]");
+            Log.log("Arguments: <jarSearchDir1>[<File.pathSeparator><jarSearchDir2>...] [pid]");
             return;
         }
 
@@ -36,8 +42,9 @@ public class AgentLoader {
         }
 
         String jarSearchDirs = args[0];
-        String pid      = args[1];
-        loadAgent(jarSearchDirs, pid);
+        String pid           = args[1];
+        int    port          = loadAgent(jarSearchDirs, pid);
+        Client.run(port);
     }
 
     /**
@@ -61,31 +68,32 @@ public class AgentLoader {
     }
 
     private static void listJvmProcesses() {
-        System.out.println("JVM processes:");
-        System.out.println("#pid\tDisplay name");
+        Log.logNoTag("JVM processes:");
+        Log.logNoTag("#pid\tDisplay name");
 
         for (VirtualMachineDescriptor vmd : VirtualMachine.list()) {
-            System.out.println(vmd.id() + "\t" + vmd.displayName());
+            Log.logNoTag(vmd.id() + "\t" + vmd.displayName());
         }
     }
 
-    private static void loadAgent(String jarSearchDirs, String pid) throws Exception {
+    private static int loadAgent(String jarSearchDirs, String pid) throws Exception {
         final String[]       ary      = jarSearchDirs.split(File.pathSeparator);
         final String         agentJar = Classpath.findJar(ary, "scalive");
         final VirtualMachine vm       = VirtualMachine.attach(pid);
-        final int            port     = Client.getFreePort();
+        final int            port     = Net.getLocalFreePort();
 
         vm.loadAgent(agentJar, jarSearchDirs + " " + port);
         Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     vm.detach();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
 
-        Client.connectToReplServer(port);
+        return port;
     }
 }
