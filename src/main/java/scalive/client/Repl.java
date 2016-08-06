@@ -14,7 +14,7 @@ class Repl {
         final InputStream  in  = socket.getInputStream();
         final OutputStream out = socket.getOutputStream();
 
-        new Thread(new Runnable() {
+        new Thread(Repl.class.getName() + "-printServerOutput") {
             @Override
             public void run() {
                 try {
@@ -23,7 +23,7 @@ class Repl {
                     throw new RuntimeException(e);
                 }
             }
-        }).start();
+        }.start();
 
         readLocalInput(reader, out);
     }

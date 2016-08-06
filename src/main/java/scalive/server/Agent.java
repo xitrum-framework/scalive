@@ -1,7 +1,5 @@
 package scalive.server;
 
-import scalive.Log;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
@@ -35,7 +33,7 @@ public class Agent {
         // - The server is blocking for connections
         // - VirtualMachine#loadAgent at the client does not return until this agentmain method returns
         // - The client only connects to the server after VirtualMachine#loadAgent returns
-        new Thread(new Runnable() {
+        new Thread(Agent.class.getName() + "-Server") {
             @Override
             public void run() {
                 try {
@@ -43,8 +41,7 @@ public class Agent {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                Log.log("Closed");
             }
-        }).start();
+        }.start();
     }
 }

@@ -5,7 +5,6 @@ import jline.console.ConsoleReader;
 import scalive.Log;
 import scalive.Net;
 
-import java.io.IOException;
 import java.net.Socket;
 
 class Client {
@@ -14,17 +13,12 @@ class Client {
         final Socket replSocket      = new Socket(Net.LOCALHOST, port);
         final Socket completerSocket = new Socket(Net.LOCALHOST, port);
 
-        // Try to notify the remote process to clean up when the client
-        // is suddenly terminated
-        Runtime.getRuntime().addShutdownHook(new Thread() {
+        // Try to notify the remote process to clean up when the client is terminated
+        final Runnable socketCleaner = Net.getSocketCleaner(replSocket, completerSocket);
+        Runtime.getRuntime().addShutdownHook(new Thread(Client.class.getName() + "-ShutdownHook") {
             @Override
             public void run() {
-                try {
-                    replSocket.close();
-                    completerSocket.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                socketCleaner.run();
             }
         });
 

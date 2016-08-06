@@ -7,6 +7,7 @@ import scala.tools.nsc.Settings;
 
 import scalive.Classpath;
 import scalive.Log;
+import scalive.Net;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,14 +18,17 @@ import java.net.URLClassLoader;
 
 class Repl {
     /** Creates a REPL and wire IO streams of the socket to it. */
-    static ILoopWithCompletion run(final Socket socket, URLClassLoader cl) throws IOException {
+    static ILoopWithCompletion run(
+            final Socket socket, URLClassLoader cl, final Runnable socketCleaner
+    ) throws IOException {
         final InputStream  in  = socket.getInputStream();
         final OutputStream out = socket.getOutputStream();
 
         final ILoopWithCompletion iloop    = new ILoopWithCompletion(in, out);
         final Settings            settings = getSettings(cl);
 
-        new Thread(new Runnable() {
+        Net.throwSocketTimeoutExceptionForLongInactivity(socket);
+        new Thread(Repl.class.getName() + "-iloop") {
             @Override
             public void run() {
                 overrideScalaConsole(in, out, new Runnable() {
@@ -32,24 +36,22 @@ class Repl {
                     public void run() {
                         // This call does not return until socket is closed,
                         // or repl has been closed by the client using ":q"
-                        iloop.process(settings);
+                        try {
+                            iloop.process(settings);
+                        } catch (Exception e) {
+                            // See throwSocketTimeoutExceptionForLongInactivity above;
+                            // just let this thread ends
+                        }
                     }
                 });
 
                 // This code should be put outside overrideScalaConsole above
                 // so that the output is not redirected to the client,
                 // in case repl has been closed by the client using ":q"
+                socketCleaner.run();
                 Log.log("REPL closed");
-
-                try {
-                    // In case repl has been closed by the client using ":q",
-                    // we need to close socket to notify the client to exit
-                    socket.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
             }
-        }).start();
+        }.start();
 
         return iloop;
     }

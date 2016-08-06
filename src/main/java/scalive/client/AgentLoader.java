@@ -83,7 +83,7 @@ public class AgentLoader {
         final int            port     = Net.getLocalFreePort();
 
         vm.loadAgent(agentJar, jarSearchDirs + " " + port);
-        Runtime.getRuntime().addShutdownHook(new Thread() {
+        Runtime.getRuntime().addShutdownHook(new Thread(AgentLoader.class.getName() + "-ShutdownHook") {
             @Override
             public void run() {
                 try {

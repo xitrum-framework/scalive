@@ -19,7 +19,7 @@ class Server {
 
     static void run(
             ServerSocket serverSocket, String[] jarSearchDirs
-    ) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, IllegalAccessException {
+    ) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InterruptedException {
         // Accept 2 connections (blocking)
         Socket replSocket = serverSocket.accept();
         Log.log("REPL connected");
@@ -34,8 +34,10 @@ class Server {
         URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
         loadDependencyJars(cl, jarSearchDirs);
 
-        ILoopWithCompletion iloop = Repl.run(replSocket, cl);
-        Completer.run(completerSocket, iloop);
+        Runnable socketCleaner = Net.getSocketCleaner(replSocket, completerSocket);
+
+        ILoopWithCompletion iloop = Repl.run(replSocket, cl, socketCleaner);
+        Completer.run(completerSocket, iloop, socketCleaner);
     }
 
     private static void loadDependencyJars(

@@ -6,6 +6,7 @@ import scala.tools.nsc.interpreter.Completion;
 import scala.tools.nsc.interpreter.Completion.Candidates;
 
 import scalive.Log;
+import scalive.Net;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,38 +19,52 @@ import java.net.Socket;
  * @see scalive.client.Completer
  */
 class Completer {
-    static void run(Socket socket, ILoopWithCompletion iloop) throws IOException {
+    static void run(
+            Socket socket, ILoopWithCompletion iloop, Runnable socketCleaner
+    ) throws IOException, InterruptedException {
         InputStream  in  = socket.getInputStream();
         OutputStream out = socket.getOutputStream();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
-        while (true) {
-            String line = reader.readLine();
-            if (line == null) break;
+        Net.throwSocketTimeoutExceptionForLongInactivity(socket);
+        try {
+            while (true) {
+                // See throwSocketTimeoutExceptionForLongInactivity above
+                String line = reader.readLine();
 
-            int idx             = line.indexOf(" ");
-            String cursorString = line.substring(0, idx);
-            int    cursor       = Integer.parseInt(cursorString);
-            String buffer       = line.substring(idx + 1);
+                // Socket closed
+                if (line == null) break;
 
-            Completion completion = getCompletion(iloop);
-            Candidates candidates = completion.completer().complete(buffer, cursor);
+                int idx = line.indexOf(" ");
+                String cursorString = line.substring(0, idx);
+                int cursor = Integer.parseInt(cursorString);
+                String buffer = line.substring(idx + 1);
 
-            out.write(("" + candidates.cursor()).getBytes("UTF-8"));
+                Completion completion = getCompletion(iloop);
+                Candidates candidates = completion.completer().complete(buffer, cursor);
 
-            List<String>     list = candidates.candidates();
-            Iterator<String> it   = list.iterator();
-            while (it.hasNext()) {
-                String candidate = it.next();
-                out.write(' ');
-                out.write(candidate.getBytes("UTF-8"));
+                out.write(("" + candidates.cursor()).getBytes("UTF-8"));
+
+                List<String> list = candidates.candidates();
+                Iterator<String> it = list.iterator();
+                while (it.hasNext()) {
+                    String candidate = it.next();
+                    out.write(' ');
+                    out.write(candidate.getBytes("UTF-8"));
+                }
+
+                out.write('\n');
+                out.flush();
             }
-
-            out.write('\n');
-            out.flush();
+        } catch (IOException e) {
+            // Socket closed
         }
 
+        socketCleaner.run();
+
+        // Before logging this out, wait a litte for System.out to be restored back to the remote process
+        Thread.sleep(1000);
         Log.log("Completer closed");
     }
 
