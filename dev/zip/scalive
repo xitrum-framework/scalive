@@ -13,6 +13,4 @@ cd "$ROOT_DIR"
 
 CLASS_PATH="$ROOT_DIR/*:."
 
-# Use exec to be compatible with daemontools:
-# http://cr.yp.to/daemontools.html
-exec java $JAVA_OPTS -cp $CLASS_PATH scalive.client.AgentLoader $ROOT_DIR $@
+java $JAVA_OPTS -cp $CLASS_PATH scalive.client.AgentLoader $ROOT_DIR $@
