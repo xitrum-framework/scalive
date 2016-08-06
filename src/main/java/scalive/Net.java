@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Net {
     // After this time, the REPL and completer connections should be closed,
-    // to avoid blocking socket reads to infinitely block threads created by Scalive in remote process
+    // to avoid blocking socket reads to infinitely block threads created by Scalive in target process
     private static final int LONG_INACTIVITY = (int) TimeUnit.HOURS.toMillis(1);
 
     public static final InetAddress LOCALHOST = getLocalHostAddress();
@@ -25,7 +25,7 @@ public class Net {
 
     /**
      * {@link SocketTimeoutException} will be thrown if there's no activity for a long time.
-     * This is to avoid blocking reads to block threads infinitely, causing leaks in the remote process.
+     * This is to avoid blocking reads to block threads infinitely, causing leaks in the target process.
      */
     public static void throwSocketTimeoutExceptionForLongInactivity(Socket socket) throws SocketException {
         socket.setSoTimeout(LONG_INACTIVITY);

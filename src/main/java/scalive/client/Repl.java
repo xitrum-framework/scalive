@@ -65,8 +65,7 @@ class Repl {
             System.out.flush();
         }
 
-        // The loop above is broken when REPL is closed by the remote process;
-        // exit now
+        // The loop above is broken when REPL is closed by the target process; exit now
         System.exit(0);
     }
 }

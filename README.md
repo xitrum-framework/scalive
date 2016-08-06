@@ -88,9 +88,10 @@ import mylib.foo.Bar
 Scalive uses the [Attach API](https://blogs.oracle.com/CoreJavaTechTips/entry/the_attach_api) in Java 6
 to tell the target process to load an [agent](http://javahowto.blogspot.jp/2006/07/javaagent-option.html).
 
-The agent then creates a REPL interpreter and a TCP server to let the
-Scalive process interact with the interpreter remotely. The Scalive
-process acts as a client.
+Inside the target progress, the agent creates a REPL interpreter and a
+TCP server to let the Scalive process connect and interact with the
+interpreter. The Scalive process acts as a TCP client. There are 2 TCP
+connections, one for REPL data and one for completion data.
 
 Similar projects:
 

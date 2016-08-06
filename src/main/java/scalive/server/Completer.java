@@ -63,7 +63,7 @@ class Completer {
 
         socketCleaner.run();
 
-        // Before logging this out, wait a litte for System.out to be restored back to the remote process
+        // Before logging this out, wait a litte for System.out to be restored back to the target process
         Thread.sleep(1000);
         Log.log("Completer closed");
     }
