@@ -52,6 +52,15 @@ Run without argument to see the list of running JVM process IDs on your local ma
 scalive
 ```
 
+Example output:
+
+```
+JVM processes:
+#pid	Display name
+13821	demos.Boot
+17978	quickstart.Boot
+```
+
 To connect a Scala REPL console to a process:
 
 ```
