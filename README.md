@@ -11,7 +11,7 @@ For Scala 2.12, download
 [scalive-1.7.0.zip](https://github.com/xitrum-framework/scalive/releases/download/1.7.0/scalive-1.7.0.zip).
 
 For Scala 2.10 and 2.11, download
-[scalive-1.6.zip](https://github.com/xitrum-framework/scalive/releases/download/1.6/scalive-1.6.zip),
+[scalive-1.6.zip](https://github.com/xitrum-framework/scalive/releases/download/1.6/scalive-1.6.zip).
 
 Extract the ZIP file, you will see:
 
