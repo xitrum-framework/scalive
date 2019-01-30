@@ -1,6 +1,6 @@
 package scalive.client;
 
-import jline.console.ConsoleReader;
+import scala.tools.jline_embedded.console.ConsoleReader;
 
 import scalive.Log;
 import scalive.Net;
@@ -23,7 +23,7 @@ class Client {
         });
 
         ConsoleReader reader = new ConsoleReader(System.in, System.out);
-        Completer.setup(completerSocket, reader);
-        Repl.run(replSocket, reader);
+        ClientCompleter.setup(completerSocket, reader);
+        ClientRepl.run(replSocket, reader);
     }
 }

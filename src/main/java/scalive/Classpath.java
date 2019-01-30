@@ -7,6 +7,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Classpath {
     private static final Method addURL = getAddURL();
@@ -51,7 +53,7 @@ public class Classpath {
         }
 
         if (maxFile == null)
-            throw new IllegalStateException("Could not find " + jarPrefix + " in " + join(jarSearchDirs, File.pathSeparator));
+            throw new IllegalStateException("Could not find " + jarPrefix + " in " + String.join(File.pathSeparator, jarSearchDirs));
         else
             return maxFile.getPath();
     }
@@ -78,7 +80,7 @@ public class Classpath {
      * but only find and add the JAR to classpath if the representativeClass has not been loaded.
      */
     public static void findAndAddJar(
-        URLClassLoader cl, String representativeClass, String[] jarSearchDirs, String jarPrefix
+            URLClassLoader cl, String representativeClass, String[] jarSearchDirs, String jarPrefix
     ) throws IllegalAccessException, MalformedURLException, InvocationTargetException {
         try {
             Class.forName(representativeClass, true, cl);
@@ -90,7 +92,7 @@ public class Classpath {
     // http://stackoverflow.com/questions/4121567/embedded-scala-repl-inherits-parent-classpath
     public static String getClasspath(URLClassLoader cl) {
         URL[] urls = cl.getURLs();
-        return join(urls, File.pathSeparator);
+        return Arrays.stream(urls).map(Objects::toString).collect(Collectors.joining(File.pathSeparator));
     }
 
     public static String getScalaVersion(
@@ -99,16 +101,5 @@ public class Classpath {
         Class<?> k = Class.forName("scala.util.Properties", true, cl);
         Method   m = k.getDeclaredMethod("versionNumberString");
         return (String) m.invoke(k);
-    }
-
-    //--------------------------------------------------------------------------
-
-    private static String join(Object[] xs, String separator) {
-        StringBuilder b = new StringBuilder();
-        for (Object x: xs) {
-            if (b.length() > 0) b.append(separator);
-            b.append(x);
-        }
-        return b.toString();
     }
 }

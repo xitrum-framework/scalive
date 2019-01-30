@@ -36,8 +36,8 @@ class Server {
 
         Runnable socketCleaner = Net.getSocketCleaner(replSocket, completerSocket);
 
-        ILoopWithCompletion iloop = Repl.run(replSocket, cl, socketCleaner);
-        Completer.run(completerSocket, iloop, socketCleaner);
+        ILoopWithCompletion iloop = ServerRepl.run(replSocket, cl, socketCleaner);
+        ServerCompleter.run(completerSocket, iloop, socketCleaner);
     }
 
     private static void loadDependencyJars(

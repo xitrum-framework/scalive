@@ -24,17 +24,12 @@ This is the directory that will be zipped when Scalive is released.
 
   zip/
     scalive
-    scalive.cmd
+    scalive.bat
     scalive-<version>.jar <- ../../target/scala-2.11/scalive-<version>.jar
-    jline-2.14.2.jar      <- Download and put JLine JAR here
 
-    scala-library-2.10.6.jar
-    scala-compiler-2.10..jar
-    scala-reflect-2.10.6.jar
-
-    scala-library-2.11.8.jar
-    scala-compiler-2.11.8.jar
-    scala-reflect-2.11.8.jar
+    scala-library-2.12.8.jar
+    scala-compiler-2.12.8.jar
+    scala-reflect-2.12.8.jar
 
 While developing:
 
@@ -46,22 +41,20 @@ Release
 -------
 
 Based on the ``zip`` directory above, prepare a directory to be zipped and
-released (remember to remove uneccessary files, like .gitignore):
+released (remember to remove unneccessary files, like .gitignore):
 
 ::
 
   scalive-<version>/
     scalive
-    scalive.cmd
+    scalive.bat
     scalive-<version>.jar  <- Doesn't depend on Scala, thus doesn't follow Scala JAR naming
 
-    scala-library-2.10.4.jar
-    scala-compiler-2.10.4.jar
-    scala-reflect-2.10.4.jar
+    scala-library-2.12.8.jar
+    scala-compiler-2.12.8.jar
+    scala-reflect-2.12.8.jar
 
-    scala-library-2.11.4.jar
-    scala-compiler-2.11.4.jar
-    scala-reflect-2.11.4.jar
+    README.md
 
 Then zip it:
 

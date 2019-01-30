@@ -36,15 +36,12 @@ public class Net {
      * The sockets are closed in the order they are given.
      */
     public static Runnable getSocketCleaner(final Socket... sockets) {
-        return new Runnable() {
-            @Override
-            public void run() {
-                for (Socket socket : sockets) {
-                    try {
-                        socket.close();
-                    } catch (IOException e) {
-                        // Ignore
-                    }
+        return () -> {
+            for (Socket socket : sockets) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    // Ignore
                 }
             }
         };

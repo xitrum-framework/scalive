@@ -14,18 +14,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
- * @see scalive.client.Completer
+ * @see scalive.client.ClientCompleter
  */
-class Completer {
+class ServerCompleter {
     static void run(
             Socket socket, ILoopWithCompletion iloop, Runnable socketCleaner
     ) throws IOException, InterruptedException {
         InputStream  in  = socket.getInputStream();
         OutputStream out = socket.getOutputStream();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
         Net.throwSocketTimeoutExceptionForLongInactivity(socket);
         try {
@@ -42,16 +43,16 @@ class Completer {
                 String buffer = line.substring(idx + 1);
 
                 Completion completion = getCompletion(iloop);
-                Candidates candidates = completion.completer().complete(buffer, cursor);
+                Candidates candidates = completion.complete(buffer, cursor);
 
-                out.write(("" + candidates.cursor()).getBytes("UTF-8"));
+                out.write(("" + candidates.cursor()).getBytes(StandardCharsets.UTF_8));
 
                 List<String> list = candidates.candidates();
                 Iterator<String> it = list.iterator();
                 while (it.hasNext()) {
                     String candidate = it.next();
                     out.write(' ');
-                    out.write(candidate.getBytes("UTF-8"));
+                    out.write(candidate.getBytes(StandardCharsets.UTF_8));
                 }
 
                 out.write('\n');
@@ -68,7 +69,7 @@ class Completer {
         Log.log("Completer closed");
     }
 
-    static private Completion getCompletion(ILoopWithCompletion iloop) {
+    static private Completion getCompletion(ILoopWithCompletion iloop) throws InterruptedException {
         while (true) {
             // iloop may recreate completion as crash recovery, so do not cache it locally
             Completion completion = iloop.getCompletion();
@@ -76,11 +77,7 @@ class Completer {
             if (completion != null) return completion;
 
             // Wait for completion to be created by iloop
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.interrupted();
-            }
+            Thread.sleep(1000);
         }
     }
 }

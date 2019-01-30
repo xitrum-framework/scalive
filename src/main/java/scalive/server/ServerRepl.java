@@ -16,7 +16,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.URLClassLoader;
 
-class Repl {
+class ServerRepl {
     /** Creates a REPL and wire IO streams of the socket to it. */
     static ILoopWithCompletion run(
             final Socket socket, URLClassLoader cl, final Runnable socketCleaner
@@ -28,20 +28,17 @@ class Repl {
         final Settings            settings = getSettings(cl);
 
         Net.throwSocketTimeoutExceptionForLongInactivity(socket);
-        new Thread(Repl.class.getName() + "-iloop") {
+        new Thread(ServerRepl.class.getName() + "-iloop") {
             @Override
             public void run() {
-                overrideScalaConsole(in, out, new Runnable() {
-                    @Override
-                    public void run() {
-                        // This call does not return until socket is closed,
-                        // or repl has been closed by the client using ":q"
-                        try {
-                            iloop.process(settings);
-                        } catch (Exception e) {
-                            // See throwSocketTimeoutExceptionForLongInactivity above;
-                            // just let this thread ends
-                        }
+                overrideScalaConsole(in, out, () -> {
+                    // This call does not return until socket is closed,
+                    // or repl has been closed by the client using ":q"
+                    try {
+                        iloop.process(settings);
+                    } catch (Exception e) {
+                        // See throwSocketTimeoutExceptionForLongInactivity above;
+                        // just let this thread ends
                     }
                 });
 
@@ -77,7 +74,7 @@ class Repl {
         // Without this class loader setting, the REPL and the target process will
         // see different instances of a static variable of the same class!
         // http://stackoverflow.com/questions/5950025/multiple-instances-of-static-variables
-        settings.explicitParentLoader_$eq(Option.apply((ClassLoader) cl));
+        settings.explicitParentLoader_$eq(Option.apply(cl));
 
         return settings;
     }
